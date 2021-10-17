@@ -11,6 +11,12 @@ import CheckBox from '@react-native-community/checkbox';
 import Header from '../../components/ui/header'
 import HeaderAuthenticated from '../../components/ui/header-authenticated';
 import Icon from 'react-native-vector-icons/AntDesign';
+import {
+  responsiveHeight,
+  responsiveWidth,
+  responsiveFontSize
+} from "react-native-responsive-dimensions";
+import api from '../../config/api';
 Icon.loadFont();
 
 
@@ -18,7 +24,7 @@ const detailsAlert = ({route, navigation}) => {
     //const [isSelected, setSelection] = useState(false);
     
 
-    const {titulo, alunos} = route.params;
+    const {titulo, alunos, ra, cpf_responsavel} = route.params;
 
     const allAlunos = alunos;
     //const [Dados, setDados] = useState([{},{},{}]);
@@ -28,31 +34,32 @@ const detailsAlert = ({route, navigation}) => {
     for(let i=0; i<alunos.length; i++){
         initialState.push({
             id: i,
+            ra: ra[i],
             nome: alunos[i],
             checked: false        
         });
     }
     const [Dados, setDados] = useState(initialState);
 
-    useEffect(() => {
-        if(allAlunos.length > 0) {
-            //const initialState = allAlunos.map((obj, key) => ok.push({id: key, value: obj[key], checked: false}));
-            //const initialState1 = allAlunos.map((obj,i) => initialState.push({value: alunos[i], id: i}));
+    // useEffect(() => {
+    //     if(allAlunos.length > 0) {
+    //         //const initialState = allAlunos.map((obj, key) => ok.push({id: key, value: obj[key], checked: false}));
+    //         //const initialState1 = allAlunos.map((obj,i) => initialState.push({value: alunos[i], id: i}));
             
-            //console.log(JSON.stringify(Dados[1].nome));
+    //         //console.log(JSON.stringify(Dados[1].nome));
             
             
-            // for(let i=0; i<alunos.length; i++){
-            //     initialState.push({
-            //         id: i,
-            //         nome: alunos[i],
-            //         checked: false        
-            //     });
-            // }
+    //         // for(let i=0; i<alunos.length; i++){
+    //         //     initialState.push({
+    //         //         id: i,
+    //         //         nome: alunos[i],
+    //         //         checked: false        
+    //         //     });
+    //         // }
            
-            // setDados(initialState)
-        }
-    }, [allAlunos])
+    //         // setDados(initialState)
+    //     }
+    // }, [allAlunos])
 
     //console.log("oooo"+JSON.stringify(Dados[0].nome));
 
@@ -86,18 +93,17 @@ const detailsAlert = ({route, navigation}) => {
     // }
 
 
-
     renderCheckboxes = () => {
     
         return Dados.map((item, key) =>{
             return(
                 <TouchableOpacity 
-                onPress={() => {this.onchecked(key)}}
-                key={key}>
+                    onPress={() => {this.onchecked(key)}}
+                    key={key} style={styles.boxitem}>
                     {item.checked == true
                     ? (<CheckBox />)
                     : (<CheckBox disabled={false}/>)}
-                    <Text>{item.nome}</Text>
+                    <Text style={styles.checktext}>{item.nome}</Text>
                 </TouchableOpacity>
             )
         })
@@ -114,18 +120,46 @@ const detailsAlert = ({route, navigation}) => {
         //alert(Dados);
     }
     
-    getSelectedDados = () => {
+    getSelectedDados = (opcao) => {
         //let Alunos = this.state.Data
         var keys = Dados.map((t) => t.id)
         var checks = Dados.map((t) => t.checked)
         let Selected = []
         for(let i=0; i<checks.length; i++){
             if(checks[i]==true){
-                Selected.push(Dados[keys[i]].nome);
+                Selected.push(Dados[keys[i]].ra);
             }
         }
-        alert(Selected);
+
+        //convertendo array para string
+        let SelectedItem = Selected.toString();
+
+        //criar api
+        // realizar update para a base dados inserir o ra e codusuario que confirmou a reserva da matricula
+        if(opcao == 'S'){
+            api.post('/matricula/confPesquisa/', {
+                p_cd_usuario_aluno: SelectedItem,
+                p_cd_usuario_resp: cpf_responsavel,
+                p_idperlet_prox: 3  
+
+            })
+            .then((res) => {
+                alert(res.data[0].mensagem)
+            })
+
+            
+            //alert(SelectedItem);
+            //alert(cpf_responsavel);
+        }else{
+            alert('Confirmação não Efetuada!');
+            navigation.navigate('Dashboard');
+        }
         //alert(Alunos[0].value);
+        //redireciona 
+        //navigation.navigate('Dashboard');
+
+
+
     }
    
 
@@ -137,7 +171,9 @@ const detailsAlert = ({route, navigation}) => {
                     <HeaderAuthenticated />
                     <View style={styles.boxHeader}>
                         <Text style={styles.boxHeaderTitle}>{titulo}</Text>
+                        <View style={styles.checkitem}>
                         {this.renderCheckboxes()}
+                        </View>
                         
                         {/* {alunos.map((aluno) =>  */}
                          {/* <View style={styles.checkitem}> */}
@@ -173,11 +209,24 @@ const detailsAlert = ({route, navigation}) => {
                             
                         {/* <Text>{props.state.students.student.RA}</Text> */}
                     </View>
-                    <TouchableOpacity
-            onPress={() => this.getSelectedDados()}>
-            <Text>Enviar</Text>
-            </TouchableOpacity>
+                
 
+
+                    <View style={styles.content}>
+                        <View style={styles.boxBtnGreen}>
+                        <TouchableOpacity
+                            onPress={() => this.getSelectedDados('S')}>
+                            <Text style={styles.btntext}>Sim</Text>
+                        </TouchableOpacity>
+                        </View>
+
+                        <View style={styles.boxBtnRed}>
+                        <TouchableOpacity 
+                            onPress={() => this.getSelectedDados('N')}>
+                            <Text style={[styles.btntext, styles.btntextRed]}>Não</Text>
+                        </TouchableOpacity>
+                        </View>
+                    </View>
 
                 </View>
             </ScrollView>
@@ -198,44 +247,49 @@ const styles = StyleSheet.create({
       borderColor: '#E8E8E8',
     },
     boxHeaderTitle: {
-      fontSize:14,
+      fontSize:responsiveFontSize(3),
       textAlign: 'center',
       textTransform: 'uppercase',
       color:'#084E82',
       fontWeight: 'bold',
-      marginBottom:15
+      marginBottom:30
 
     },
     boxBtnGreen: {
       backgroundColor: '#34A853',
       color:'#FFF',
       borderWidth:0,
-      padding: 10,
+      padding: 15,
       borderRadius:10,
-      marginVertical:10
+      marginRight:15,
+      width:'45%'
     },
     boxBtnRed: {
-      backgroundColor: '#EA4335',
-      color: '#FFF',
-      borderWidth:0,
-      padding: 10,
+      borderWidth: 1,
+      borderColor: '#EA4335',
+      padding: 15,
       borderRadius:10,
-      margin:10
+      marginLeft:15,
+      width:'45%'
+    },
+    btntextRed:{
+        color: '#EA4335'
     },
     checktext: {
-        fontSize: 16,
+        fontSize: responsiveFontSize(2),
         marginLeft: 10,
         width:'80%'
     },
     checkitem: {
         flex: 1,
-        flexDirection: 'row',
+        flexDirection: 'column',
         alignItems: 'center',
         marginBottom: 20
     },
     boxitem: {
         flexDirection:"row", 
-        alignItems:'center'
+        alignItems:'center',
+        padding:10
     },
     checkbox: {
         borderColor: '#E8E8E8',
@@ -250,13 +304,16 @@ const styles = StyleSheet.create({
     },
     content: {
         marginTop:20,
-        width: '100%'
-        
+        paddingHorizontal:20,
+        flexDirection: "row",
+        alignContent: "center",
+        textAlign: "center",
+        justifyContent: "center"
     },
     button:{
         backgroundColor: '#4F74B2',
         color:'#FFFFFF',
-        borderRadius:10,
+        borderRadius:20,
         paddingHorizontal: 10,
         paddingVertical:10,
     },
@@ -264,18 +321,12 @@ const styles = StyleSheet.create({
         color:'#FFFFFF',
         justifyContent:'center', 
         alignItems: 'center', 
-        fontSize: 14, 
+        fontSize: responsiveFontSize(3), 
         fontWeight: 'bold', 
         textAlign: 'center'
     }
 });
 
 
-const mapStateToProps = (state) => {
-    return {
-        auth: state.auth,
-        students: state.students,
-    }
-}
-export default connect(mapStateToProps)(detailsAlert);
+export default detailsAlert;
 

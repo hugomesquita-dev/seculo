@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, useState, useEffect} from 'react';
 import {connect} from 'react-redux';
 import {
   StyleSheet,
@@ -9,8 +9,11 @@ import {
   TouchableOpacity,
   ScrollView,
   Platform,
-  Dimensions
+  Dimensions,
+  TextInput
 } from 'react-native';
+
+import TypeWriter from 'react-native-typewriter'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import Header from '../../components/ui/header';
@@ -19,6 +22,11 @@ import HeaderSelectUser from '../../components/ui/header-select-user';
 import Alert from '../../screens/alert';
 import Icon from 'react-native-vector-icons/AntDesign';
 Icon.loadFont();
+import {
+  responsiveHeight,
+  responsiveWidth,
+  responsiveFontSize
+} from "react-native-responsive-dimensions";
 /*import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';*/
 
@@ -58,9 +66,32 @@ const Tab = ({ title, active = false }) => {
 
 
 class Dashboard extends Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      typing: 1
+    }
+  }
+
   static navigationOptions = {
     header: null
   }
+
+
+
+  done = () =>{
+    // if(this.state.typing == 1){
+    //   this.state.typing = -1;
+    // }else if(this.state.typing == -1){
+    //   this.state.typing = 1;
+    // }
+    //alert("ok");
+    //alert(this.state.typing);
+   // this.state.typing = -1;
+
+    this.state.typing = !this.state.typing;
+  }
+
 
   logout = async () => {
     
@@ -84,6 +115,8 @@ class Dashboard extends Component {
     this.props.navigation.replace('Signin')
   };
 
+
+
   componentDidMount = () =>{
 
     try{
@@ -104,6 +137,7 @@ class Dashboard extends Component {
 
   render() {
     
+
     const data = [
       {
         id: '00',
@@ -275,6 +309,8 @@ class Dashboard extends Component {
           <View style={{paddingHorizontal: 10, marginTop: 20}}>
             <HeaderSelectUser />
           </View>
+         
+          
 
           <View style={{paddingHorizontal: 10, paddingTop: 20}}>
             <FlatList
@@ -325,6 +361,29 @@ class Dashboard extends Component {
             />
             
           </View>
+
+          <View style={{backgroundColor:'#4674b7', flex:1, height:60, marginVertical:40,
+            position:'relative', marginBottom:60}}>
+            <Image
+                style={{zIndex:2, marginLeft:30, marginTop:-40}}
+                source={require('../../assets/images/maskote.png')}
+              />
+              <TouchableOpacity
+                onPress={() => this.props.navigation.navigate('Support')}
+                style={{zIndex:2, position: 'absolute', top:15, right:60}}>
+                <TypeWriter 
+                  onTypingEnd={this.done}
+                  typing={this.state.typing}
+                  
+                  //reset={this.state.typing}
+                  style={{fontSize:responsiveFontSize(2.5), color:'#FFF', fontWeight:'bold' }}>
+                  PRECISA DE AJUDA?
+                  </TypeWriter>
+                </TouchableOpacity>
+          </View>
+
+
+
           <View
             style={{
               bottom: 0,
@@ -344,16 +403,27 @@ class Dashboard extends Component {
 
             <View
               style={{paddingVertical: Platform.OS === 'android' ? 15 : 25}}>
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 onPress={() => this.props.navigation.navigate('Support')}>
                 <Text
                   style={{
                     textAlign: 'center',
                     marginBottom: Platform.OS === 'android' ? 0 : 10,
                   }}>
-                  PRECISA DE AJUDA?
+
+              <TypeWriter 
+                onTypingEnd={this.done}
+                typing={this.state.typing}
+                
+                //reset={this.state.typing}
+                style={{fontSize:20}}>
+                PRECISA DE AJUDA?
+                </TypeWriter>
+
                 </Text>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
+              
+             
 
               <TouchableOpacity
               onPress={this.logout}
@@ -361,7 +431,7 @@ class Dashboard extends Component {
               <Text style={{ textAlign: 'center',
                 color: '#FFF',
                 fontWeight: 'bold',
-                fontSize: 12}}> 
+                fontSize: responsiveFontSize(1.8)}}> 
                  Sair</Text>
               </TouchableOpacity>
 
@@ -515,7 +585,7 @@ const styles = StyleSheet.create({
     color: '#4674b7',
     textAlign: 'center',
     fontWeight: 'bold',
-    fontSize: 10,
+    fontSize: responsiveFontSize(1.2),
     padding:2,
     //paddingHorizontal: 5,
     flexShrink: 1,

@@ -13,8 +13,9 @@ class Alert extends React.Component {
         super(props);
 
         this.state = {
-            alertaStatus: "A",
+            alertaStatus: "",
             valorTitulo: "",
+            valorTipoAlerta: "",
             //Values: ["Aluno Teste", "Teste da Silva"],
             Values: [],
             Data: []
@@ -52,7 +53,9 @@ class Alert extends React.Component {
                 this.setState({
                     alertaStatus: res.data[0].STATUS,
                     valorTitulo: res.data[0].DESCRICAO,
-                    Values: res.data.map((item) => item.NM_ALUNO)
+                    valorTipoAlerta: res.data[0].TIPO_ALERTA,
+                    nm_alunos: res.data.map((item) => item.NM_ALUNO),
+                    ra: res.data.map((item) => item.RA)
                 })
 
 
@@ -101,68 +104,84 @@ class Alert extends React.Component {
         });
     }
 
-    renderCheckboxes(){
-        return this.state.Data.map((item, key) => {
-            return(
-                <TouchableOpacity 
-                onPress={() => {this.onchecked(key)}}
-                key={key}>
-                    {item.checked == true 
-                    ? (<CheckBox/>)
-                    : (<CheckBox disabled={false} />)}
-                    <Text>{item.value}</Text>
-                </TouchableOpacity>
-            )
-        })
-    }
-
-    onchecked(key) {
-        let Alunos = this.state.Data
-        let index = Alunos.findIndex(x=>x.id===key)
-        Alunos[index].checked = !Alunos[index].checked
-        this.setState({Data:Alunos})
-    }
-
-    getSelectedDados = () => {
-        let Alunos = this.state.Data
-        var keys = this.state.Data.map((t) => t.id)
-        var checks = this.state.Data.map((t) => t.checked)
-        let Selected = []
-        for(let i=0; i<checks.length; i++){
-            if(checks[i]==true){
-                Selected.push(Alunos[keys[i]].value);
-            }
-        }
-        alert(Selected);
-        //alert(Alunos[0].value);
-    }
-    // componentDidUpdate = () => {
-    //     api
-    //     .post('/matricula/lstAlerta/', {
-    //         p_cpf_responsavel: this.props.auth.user.USU_LOGIN
+    // renderCheckboxes(){
+    //     return this.state.Data.map((item, key) => {
+    //         return(
+    //             <TouchableOpacity 
+    //             onPress={() => {this.onchecked(key)}}
+    //             key={key}>
+    //                 {item.checked == true 
+    //                 ? (<CheckBox/>)
+    //                 : (<CheckBox disabled={false} />)}
+    //                 <Text>{item.value}</Text>
+    //             </TouchableOpacity>
+    //         )
     //     })
-    //     .then((res) => {
-    //         if(res.data.length == 0){
-    //             this.setState({
-    //                 alertaStatus: "I"
-    //             });
-    //         }else{
-    //             this.setState({
-    //                 alertaStatus: res.data[0].STATUS,
-    //                 valorTitulo: res.data[0].DESCRICAO
-    //             })
-    //         }
-    //     });
     // }
+
+    // onchecked(key) {
+    //     let Alunos = this.state.Data
+    //     let index = Alunos.findIndex(x=>x.id===key)
+    //     Alunos[index].checked = !Alunos[index].checked
+    //     this.setState({Data:Alunos})
+    // }
+
+    // getSelectedDados = () => {
+    //     let Alunos = this.state.Data
+    //     var keys = this.state.Data.map((t) => t.id)
+    //     var checks = this.state.Data.map((t) => t.checked)
+    //     let Selected = []
+    //     for(let i=0; i<checks.length; i++){
+    //         if(checks[i]==true){
+    //             Selected.push(Alunos[keys[i]].value);
+    //         }
+    //     }
+    //     alert(Selected);
+    //     //alert(Alunos[0].value);
+    // }
+    componentDidUpdate = () => {
+        api
+        .post('/matricula/lstAlerta/', {
+            p_cpf_responsavel: this.props.auth.user.USU_LOGIN
+        })
+        .then((res) => {
+            if(res.data.length == 0){
+                this.setState({
+                    alertaStatus: "I"
+                });
+            }else{
+                this.setState({
+                    alertaStatus: res.data[0].STATUS,
+                    valorTitulo: res.data[0].DESCRICAO,
+                    valorTipoAlerta: res.data[0].TIPO_ALERTA,
+                    nm_alunos: res.data.map((item) => item.NM_ALUNO),
+                    ra: res.data.map((item) => item.RA)
+                })
+            }
+        });
+    }
 
     render(){
         return(
             <>
-            {this.state.alertaStatus == 'A' && 
+            {this.state.alertaStatus == 'A' && this.state.valorTipoAlerta == 'PESQUISA' && 
             <View style={styles.boxHeader}>
                 {/* {this.renderCheckboxes()} */}
                 <TouchableOpacity
-                onPress={() => this.props.navigation.navigate('detailsAlert', {titulo: this.state.valorTitulo, alunos: this.state.Values})}>  
+                onPress={() => this.props.navigation.navigate('detailsAlert', {titulo: this.state.valorTitulo, alunos: this.state.nm_alunos, ra: this.state.ra, cpf_responsavel: this.props.auth.user.USU_LOGIN})}>  
+                <Text style={styles.boxHeaderTitle}>
+                {this.state.valorTitulo}
+                
+                </Text>
+                </TouchableOpacity> 
+            </View>  
+            } 
+
+            {this.state.alertaStatus == 'A' && this.state.valorTipoAlerta == 'MATRICULA' && 
+            <View style={styles.boxHeader}>
+                {/* {this.renderCheckboxes()} */}
+                <TouchableOpacity
+                onPress={() => this.props.navigation.navigate('Registration')}>  
                 <Text style={styles.boxHeaderTitle}>
                 {this.state.valorTitulo}
                 
@@ -170,12 +189,6 @@ class Alert extends React.Component {
                 </TouchableOpacity> 
             </View>  
             }
-
-            <TouchableOpacity
-            onPress={() => this.getSelectedDados()}>
-            <Text>Enviar</Text>
-            </TouchableOpacity>
-                            
             </>   
             
         );
