@@ -173,7 +173,7 @@ class ContentsHours extends React.Component {
                 changeTabSelected={this.changeTabSelected}/>
           </View>
           {this.state.loading && <ActivityIndicator size="large" color="#4674B7" />}
-
+          
 
         
           

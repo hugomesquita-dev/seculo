@@ -50,18 +50,26 @@ class WeeklyMenu extends React.Component {
     ],
   };
 
+  
   changeTabSelected = (tabActive) => {
     this.setState({
       tabActive,
     });
   };
 
+  
   componentDidMount = () => {
+
+    console.log("++++++++RA: "+this.props.auth.students.RA);
     api
       .post('/cardapio/lstCardapio/', {
         p_cd_usuario: this.props.auth.students.RA,
       })
       .then((res) => {
+        
+        //console.log("Calendário: "+res.data);
+
+
         res.data.map((menu) => {
           if (menu.DC_TIPO == 'LANCHE DA MANHÃ (Exclusivo Ensino Infantil)') {
             this.state.weekly = [
@@ -139,8 +147,8 @@ class WeeklyMenu extends React.Component {
           }
         });
 
-
-        //console.log("CARDAPIO: "+JSON.stringify(this.state))
+        //console.log(""+this.state.weekly);
+        //console.log("CARDAPIO: "+JSON.stringify(this.state.weekly))
 
         this.setState({...this.state}, () => {
           this.state;
@@ -149,6 +157,10 @@ class WeeklyMenu extends React.Component {
       .catch((err) => {});
   };
 
+
+
+
+  
   render() {
     return (
       <View style={{height: height}}>
@@ -329,7 +341,8 @@ class WeeklyMenu extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    auth: state.auth,
+      auth: state.auth,
+      students: state.students,
   };
 };
 

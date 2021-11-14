@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   TextInput,
   Image,
+  KeyboardAvoidingView
 } from 'react-native';
 
 import Header from '../../../components/ui/header';
@@ -27,7 +28,7 @@ class Chat extends React.Component {
             }}>
             <Text
               style={{color: '#4674B7', fontWeight: 'bold', marginBottom: 3}}>
-              Breno Pereira
+              Hugo Mesquita
             </Text>
             <Text>Olá, gostaria de uma informação...</Text>
             <Text style={{fontSize: 10, marginTop: 10, textAlign: 'right'}}>
@@ -50,7 +51,7 @@ class Chat extends React.Component {
             }}>
             <Text
               style={{color: '#EA943D', fontWeight: 'bold', marginBottom: 3}}>
-              Breno Pereira
+              Hugo Mesquita
             </Text>
             <Text>Olá, gostaria de uma informação...</Text>
             <Text style={{fontSize: 10, marginTop: 10, textAlign: 'right'}}>
@@ -62,13 +63,16 @@ class Chat extends React.Component {
     };
 
     return (
+     
       <ScrollView
         contentContainerStyle={{
           flex: 1,
         }}>
+        
         <View style={{flex: 1, backgroundColor: '#F1F1F2'}}>
           <Header navigation={this.props.navigation} />
           <HeaderAuthenticated />
+          
           <View
             style={{
               marginVertical: 15,
@@ -83,6 +87,8 @@ class Chat extends React.Component {
               CHAT
             </Text>
           </View>
+
+
           <View
             style={{
               paddingHorizontal: 20,
@@ -94,6 +100,8 @@ class Chat extends React.Component {
               <Reply />
               <SeculoReply />
             </View>
+           
+           
             <View
               style={{
                 flexDirection: 'row',
@@ -117,8 +125,14 @@ class Chat extends React.Component {
                 style={{width: 20, height: 20, marginRight: 10}}
               />
             </View>
+
+            
           </View>
+          
+
+
         </View>
+        
       </ScrollView>
     );
   }

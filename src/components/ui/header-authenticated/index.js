@@ -2,7 +2,8 @@ import React, {Component} from 'react';
 import {Text, 
     View, 
     TouchableOpacity, 
-    StyleSheet} from 'react-native';
+    StyleSheet,
+  Image} from 'react-native';
 //import api from '../../../config/api';
 import {connect} from 'react-redux';
 
@@ -122,9 +123,18 @@ class HeaderAuthenticated extends React.Component {
           </TouchableOpacity>
         </View> */}
         
-
+        <View style={{marginTop: -5}}>
+              <Image
+                style={{
+                  width: '100%',
+                }}
+                source={require('../../../assets/images/bar.png')}
+                resizeMode="contain"
+              />
+            </View>
 
       </View>
+      
     );
   }
 }

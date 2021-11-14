@@ -10,8 +10,13 @@ import LogoImage from '../../../assets/images/logo.png';
 import {HeaderGradient, Logo, Content} from './styles';
 
 class Header extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
   render() {
     return (
+      <View>
       <HeaderGradient 
         start={{x: 0, y: 0}}
         end={{x: 1, y: 0}}
@@ -38,19 +43,20 @@ class Header extends React.Component {
             flexDirection: 'row',
             alignItems: 'center',
           }}>
-          <TouchableOpacity
+          {/* <TouchableOpacity
             onPress={() => this.props.navigation.navigate('Support')}>
-            {/* <Image
+            //comentar
+            <Image
               source={require('../../../assets/images/chat.png')}
               resizeMode="contain"
               style={{
                 width: 20,
                 marginRight: 25,
               }}
-            /> */}
+            />
 
             <Text style={{marginRight:20}}><Icon name="wechat" size={25} color="#FFFFFF"/></Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
           <TouchableOpacity
             onPress={() => this.props.navigation.navigate('Comunication')}>
              <Image
@@ -64,6 +70,8 @@ class Header extends React.Component {
           </TouchableOpacity>
         </View>
       </HeaderGradient>
+    
+      </View>
     );
   }
 }

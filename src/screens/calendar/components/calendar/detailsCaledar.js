@@ -12,6 +12,11 @@ import { connect } from 'react-redux';
 
 import Header from '../../../../components/ui/header'
 import HeaderAuthenticated from '../../../../components/ui/header-authenticated';
+import {
+    responsiveHeight,
+    responsiveWidth,
+    responsiveFontSize
+    } from "react-native-responsive-dimensions";
 import Icon from 'react-native-vector-icons/AntDesign';
 Icon.loadFont();
 //import api from '../../../../config/api';
@@ -178,7 +183,7 @@ const styles = StyleSheet.create({
     title:{
         color:'#1A2541',
         fontWeight: 'bold',
-        fontSize: 12,
+        fontSize: responsiveFontSize(2)
        
     },
     shared:{
@@ -201,7 +206,10 @@ const styles = StyleSheet.create({
     content:{
         fontSize:12,
         marginVertical:20,
-        paddingHorizontal:10
+        paddingHorizontal:10,
+        fontSize: responsiveFontSize(1.8),
+        textTransform: 'uppercase',
+        lineHeight:25,
     },
     container:{
         marginHorizontal:15,

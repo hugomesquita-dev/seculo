@@ -27,10 +27,12 @@ import {
   responsiveWidth,
   responsiveFontSize
 } from "react-native-responsive-dimensions";
+
 /*import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';*/
 
 import messaging from '@react-native-firebase/messaging';
+// import notifee from '@notifee/react-native';
 let { width, height } = Dimensions.get("window");
 let widthTab = width / 3;
 /*const Tabs = () => {
@@ -98,7 +100,7 @@ class Dashboard extends Component {
     try{
 
       messaging()
-      .unsubscribeFromTopic( this.props.auth.user.USU_LOGIN)
+      .unsubscribeFromTopic(this.props.auth.user.USU_LOGIN)
       .then(() => console.log('Subscribed to topic!'));
 
       for(let index in this.props.students.students){
@@ -122,7 +124,7 @@ class Dashboard extends Component {
     try{
 
       messaging()
-      .subscribeToTopic( this.props.auth.user.USU_LOGIN)
+      .subscribeToTopic(this.props.auth.user.USU_LOGIN)
       .then(() => console.log('Subscribed to topic!'));
 
       for(let index in this.props.students.students){
@@ -136,7 +138,24 @@ class Dashboard extends Component {
   componentDidUpdate = () => {}
 
   render() {
-    
+    /*
+    const channelId = notifee.createChannel({
+      id: 'default',
+      name: 'Padrão'
+    })
+  
+    const createAdroindNotificationChannels = async () => {
+  
+      await notifee.displayNotification({
+        title: 'Notification Title',
+        body: 'Main body content of the notification',
+        android: {
+          channelId,
+        },
+      });
+      
+    }*/
+
 
     const data = [
       {
@@ -227,7 +246,7 @@ class Dashboard extends Component {
         done: false,
         roles: ['responsavel'],
       },
-      {
+      /*{
         id: '14',
         name: 'RECADOS',
         //image: require('../../assets/images/balance.png'),
@@ -235,7 +254,7 @@ class Dashboard extends Component {
         navigation: 'Messages',
         done: false,
         roles: ['responsavel'],
-      }
+      }*/
 
     
     ];
@@ -299,11 +318,8 @@ class Dashboard extends Component {
         <View style={{backgroundColor: '#F1F1F2', flex: 1}}>
           <Header navigation={this.props.navigation} />
           <HeaderAuthenticated />
-          <Alert navigation={this.props.navigation}/>
-
           
-
-          
+          <Alert navigation={this.props.navigation}/>      
 
 
           <View style={{paddingHorizontal: 10, marginTop: 20}}>
@@ -362,14 +378,14 @@ class Dashboard extends Component {
             
           </View>
 
-          <View style={{backgroundColor:'#4674b7', flex:1, height:60, marginVertical:40,
+          {/* <View style={{backgroundColor:'#4674b7', flex:1, height:60, marginVertical:40,
             position:'relative', marginBottom:60}}>
             <Image
                 style={{zIndex:2, marginLeft:30, marginTop:-40}}
                 source={require('../../assets/images/maskote.png')}
               />
               <TouchableOpacity
-                onPress={() => this.props.navigation.navigate('Support')}
+                onPress={() => this.props.navigation.navigate('Chat')}
                 style={{zIndex:2, position: 'absolute', top:15, right:60}}>
                 <TypeWriter 
                   onTypingEnd={this.done}
@@ -380,7 +396,7 @@ class Dashboard extends Component {
                   PRECISA DE AJUDA?
                   </TypeWriter>
                 </TouchableOpacity>
-          </View>
+          </View> */}
 
 
 
@@ -390,7 +406,7 @@ class Dashboard extends Component {
               zIndex: 100,
               width: '100%'
             }}>
-            <View>
+            {/* <View>
               <Image
                 style={{
                   width: '100%',
@@ -398,11 +414,12 @@ class Dashboard extends Component {
                 source={require('../../assets/images/bar.png')}
                 resizeMode="contain"
               />
-            </View>
+            </View> */}
 
 
             <View
-              style={{paddingVertical: Platform.OS === 'android' ? 15 : 25}}>
+              style={{paddingVertical: Platform.OS === 'android' ? 15 : 25}}
+              >
               {/* <TouchableOpacity
                 onPress={() => this.props.navigation.navigate('Support')}>
                 <Text
@@ -427,7 +444,7 @@ class Dashboard extends Component {
 
               <TouchableOpacity
               onPress={this.logout}
-              style={{flex: 1, justifyContent:'center', margin:20, alignItems:'center', padding:10, borderRadius:20, backgroundColor:'#4674b7'}}>
+              style={{flex: 1, justifyContent:'center', marginHorizontal:20, alignItems:'center', padding:10, borderRadius:20, backgroundColor:'#4674b7'}}>
               <Text style={{ textAlign: 'center',
                 color: '#FFF',
                 fontWeight: 'bold',
@@ -435,6 +452,7 @@ class Dashboard extends Component {
                  Sair</Text>
               </TouchableOpacity>
 
+              {/* <TouchableOpacity onPress={() => createAdroindNotificationChannels()}><Text>Notificacao Local</Text></TouchableOpacity> */}
 
             </View>
           </View> 

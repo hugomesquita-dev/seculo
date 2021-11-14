@@ -4,11 +4,10 @@ import {
   FlatList,
   Text,
   TouchableOpacity,
-  TextInput,
-  Image,
   ActivityIndicator,
   ScrollView,
-  Dimensions
+  Dimensions,
+  StyleSheet
 } from 'react-native';
 
 import Header from '../../../components/ui/header';
@@ -18,6 +17,11 @@ Icon.loadFont();
 
 import api from '../../../config/api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {
+  responsiveHeight,
+  responsiveWidth,
+  responsiveFontSize
+  } from "react-native-responsive-dimensions";
 
 let { width, height } = Dimensions.get("window");
 let user
@@ -30,6 +34,8 @@ init();
 const leiaMais = (string, limite) => {
   if(string.length > limite){
     return string.substring(0, limite).concat("...");
+  }else{
+    return string;
   }
 }
 
@@ -47,20 +53,21 @@ class Comunication extends React.Component {
 
   componentDidMount = () => {
 
-    console.log(" Responsavel: " + user.USU_LOGIN)
+   //console.log(" Responsavel: " + user.USU_LOGIN)
     api
-      .post('notificacao/lstNotificacao/', {
+      .post('notificacao/lstNotificacao-homologacao/', {
         p_cd_usuario: user.USU_LOGIN,
       })
       .then((res) => {
 
-        console.log("Comunicados: " + JSON.stringify(res))
+        console.log("Comunicados: " + JSON.stringify(res.data))
         if (res.data.length > 0) {
 
           this.setState({
-            notas: res.data,
+            itens: res.data,
             loading: false
           })
+          
         } else {
           alert("Você não tem comunicados.");
         }
@@ -80,7 +87,7 @@ class Comunication extends React.Component {
         p_status_confirmacao: resposta,
       })
       .then((res) => {
- 
+          console.log(JSON.stringify(res.data));
           alert("Resposta ao comunicado enviada.");
         
       })
@@ -90,8 +97,7 @@ class Comunication extends React.Component {
 
   render() {
     return (
-      <View style={{height: height}}>
-      <ScrollView>
+      <ScrollView nestedScrollEnabled={true} showsVerticalScrollIndicator={true}> 
         <View style={{ flex: 1, backgroundColor: '#F1F1F2', marginBottom:65}}>
           <Header navigation={this.props.navigation} />
           <HeaderAuthenticated />
@@ -111,193 +117,141 @@ class Comunication extends React.Component {
           </View>
 
           <View style={{ paddingHorizontal: 20, marginBottom: 20 }} >
-            <View>
-
               {this.state.loading && <ActivityIndicator size="large" color="#4674B7" />}
 
               <View
                 scrollEnabled={true}
                 scrollIndicatorInsets={true}>
-
                 <FlatList
-                  data={this.state.notas}
-                  renderItem={(itemComunicado) =>
-
-                    <View style={{
-                      borderWidth: 1,
-                      borderColor: '#E8E8E8',
-                      backgroundColor: '#FFF',
-                      padding: 20,
-                      borderRadius: 20,
-                      marginBottom: 10,
-                      alignItems:'center'
-                    }}>
-
-                    <TouchableOpacity onPress={() => {
-                            this.props.navigation.navigate('DetailsComunication', {titulo: itemComunicado.item.TITULO, conteudo: itemComunicado.item.MENSAGEM})
-                            }}>
+                    data={this.state.itens}
+                    renderItem={(itemComunicado) =>
+                    <TouchableOpacity 
+                      key={itemComunicado.item.ID_NOTIFICACAO}
+                      onPress={() => {this.props.navigation.navigate('DetailsComunication', {
+                              titulo: itemComunicado.item.TITULO, 
+                              conteudo: itemComunicado.item.MENSAGEM,
+                              anexo: itemComunicado.item.ANEXO,
+                              tipo_notificacao: itemComunicado.item.NM_TIPO,
+                              flg_acao_atividade: itemComunicado.item.FLG_ACAO,
+                              id_notificacao: itemComunicado.item.ID_NOTIFICACAO
+                              })
+                            }}>     
                       
-                      {/* <Text style={{position: 'absolute', left:-10, top:-5}}>
-                        <Icon name="pushpino" size={25} color="#4674b7" /> 
-                      </Text> */}
-                      <Text
-                        style={{
-                          textAlign: 'center',
-                          color: '#4674B7',
-                          fontWeight: 'bold',
-                        }}>  
-                        {itemComunicado.item.TITULO}
-                      </Text>
+                       <View style={styles.box}>
+                          <View style={{flex:2, flexDirection: 'row'}}>
+                              <View style={{flex:2, paddingRight: 10}}>
+                                  <Text style={styles.boxTitle}>{itemComunicado.item.TITULO} </Text>
+                                  <Text style={styles.boxTitleDisc}>{itemComunicado.item.DISCIPLINA}</Text>
+                                  
+                                  
+                              </View>
+                              <View style={{flex:1.2}}>
+                                  {itemComunicado.item.FLG_ACAO == 'CONCLUIDO' && <Text style={styles.btn}><Text style={[styles.btnText, styles.btnTextGreen]}>{itemComunicado.item.FLG_ACAO}</Text> <Icon name="check" size={25}  style={[styles.btnTextGreen, styles.btnIconSmall]}/></Text>}
+                                  {itemComunicado.item.FLG_ACAO == 'FAZER' && <Text style={styles.btn}><Text style={[styles.btnText, styles.btnTextBlue]}>{itemComunicado.item.FLG_ACAO}</Text> <Icon name="exclamation" size={25}  style={[styles.btnTextBlue, styles.btnIconSmall]}/></Text>}
+                                  {itemComunicado.item.FLG_ACAO == 'REFAZER' && <Text style={styles.btn}><Text style={[styles.btnText, styles.btnTextRed]}>{itemComunicado.item.FLG_ACAO}</Text> <Icon name="retweet" size={25}  style={[styles.btnTextRed, styles.btnIconSmall]}/></Text>}
+                              </View>
+                              
+                          </View>
+                          <View>
+                            <Text style={styles.boxContent}>{leiaMais(itemComunicado.item.MENSAGEM,100)}</Text>
+                            <Text style={styles.contentDate}>
+                                {itemComunicado.item.DT_NOTIFICAR}
+                            </Text>
+                          </View>
+                       </View>
 
-
-                      
-                      <Text style={{ textAlign: 'justify', marginVertical: 10 }}>
-                        {leiaMais(itemComunicado.item.MENSAGEM, 100)}
-                      </Text>
-                      <Text style={{ textAlign: 'right', fontWeight: 'bold', color:'#6C6C6C' }}>
-                        {itemComunicado.item.DT_NOTIFICAR}
-                      </Text>
-                      {/* <View
-                        style={{
-                          flexDirection: 'row',
-                          alignItems: 'center',
-                          backgroundColor: '#e1e1e1',
-                          width: '50%',
-                          justifyContent: 'center',
-                          paddingVertical: 10,
-                          borderRadius: 10,
-                          borderWidth: 1,
-                          borderColor: '#ccc',
-                        }}>
-
-                        <TouchableOpacity onPress={() => this.responderNotificacao("S", itemComunicado.item.ID_NOTIFICACAO)}>
-                          <Text>SIM</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={() => this.responderNotificacao("N", itemComunicado.item.ID_NOTIFICACAO)}
-                          style={{
-                            marginLeft: 10,
-                            borderLeftWidth: 1,
-                            paddingLeft: 10,
-                          }}>
-                          <Text>NÃO</Text>
-                        </TouchableOpacity>
-                      </View> */}
-                      </TouchableOpacity>
-
-                    </View>
-
+                     
+                    </TouchableOpacity>  
+                    
                   }
-                  keyExtractor={(item) => item.name}
+                  keyExtractor={(item) => item.ID}
                 />
               </View>
 
-            </View>
+           
           </View>
         </View>
-      </ScrollView>
-
-
-
-      {/* <View>
-        <Image
-          style={{
-            width: '100%',
-            position: "absolute",
-            top: -70
-          }}
-          source={require('../../../assets/images/bar.png')}
-          resizeMode="contain"
-        />
-      </View> */}
-
-      
-        {/* <View 
-          style={{
-            position: "absolute",
-            flex: 1,
-            left:0,
-            right:0,
-            bottom: 0,
-            flexDirection: "row",
-            width: width,
-            height: 65,
-            justifyContent: "space-around",
-            alignItems: "center",
-            flexDirection: "row",
-            backgroundColor: "#FFF"
-          }}>
-            
-          <Text>
-            <TouchableOpacity
-               onPress={() =>
-                this.props.navigation.navigate('Dashboard')
-              }
-              style={{flex: 1, justifyContent:'center', alignItems:'center'}}>
-              <Icon name="home" size={20} color="#4674b7"/>
-              <Text style={{ textAlign: 'center',
-                color: '#4674b7',
-                fontWeight: 'bold',
-                marginTop:5,
-                fontSize: 12,}}> 
-                 Home</Text>
-            </TouchableOpacity>
-          </Text>
-
-          <Text>
-            <TouchableOpacity
-               onPress={() =>
-                this.props.navigation.navigate('Dashboard')
-              }
-              style={{flex: 1, justifyContent:'center', alignItems:'center'}}>
-              <Icon name="pushpino" size={20} color="#4674b7"/>
-              <Text style={{ textAlign: 'center',
-                color: '#4674b7',
-                fontWeight: 'bold',
-                marginTop:5,
-                fontSize: 12,}}> 
-                 Solicitações</Text>
-            </TouchableOpacity>            
-          </Text>
-
-          <Text>
-          <TouchableOpacity
-               onPress={() =>
-                this.props.navigation.navigate('Dashboard')
-              }
-              style={{flex: 1, justifyContent:'center', alignItems:'center'}}>
-              <Icon name="home" size={20} color="#4674b7"/>
-              <Text style={{ textAlign: 'center',
-                color: '#4674b7',
-                fontWeight: 'bold',
-                marginTop:5,
-                fontSize: 12,}}> 
-                 Loja</Text>
-            </TouchableOpacity>
-
-          </Text>
-          
-          <Text>
-            <TouchableOpacity
-              onPress={this.logout}
-              style={{flex: 1, justifyContent:'center', alignItems:'center'}}>
-              <Icon name="logout" size={20} color="#4674b7"/>
-              <Text style={{ textAlign: 'center',
-                color: '#4674b7',
-                fontWeight: 'bold',
-                marginTop:5,
-                fontSize: 12,}}> 
-                 Sair</Text>
-            </TouchableOpacity>
-          </Text>
-        </View>  */}
-
-
-
-      </View>
-
+        </ScrollView>
     );
   }
 }
+
+
+const styles = StyleSheet.create({
+  box: {
+      borderWidth: 1,
+      borderColor: '#E8E8E8',
+      backgroundColor: '#FFF',
+      padding: 20,
+      borderRadius: 20,
+      marginBottom: 10
+  },
+  boxTitle: {
+      color: '#4674B7',
+      fontWeight: 'bold',
+      fontSize: responsiveFontSize(2)
+  },
+  boxTitleDisc: {
+      color: '#5b5b5b',
+      fontWeight: 'bold',
+      fontSize: responsiveFontSize(1.8),
+      marginVertical: 5
+  },
+  boxContent: { 
+      marginVertical: 5,
+      fontSize: responsiveFontSize(1.8),
+      textAlign: 'left',
+      textTransform: 'uppercase'
+  },
+  contentTitle: {
+      textAlign: 'center', 
+      fontSize:32, 
+      color:'#111', 
+      fontWeight:'bold'
+  },
+  contentDate: {
+      textAlign: 'right', 
+      fontWeight: 'bold', 
+      color:'#6C6C6C' 
+  },
+  btn:{
+      textAlign: 'right',
+      
+  },
+  btnGreen:{
+      borderColor: '#2d9500'
+  },
+  btnBlue:{
+      borderColor: '#4674B7'
+  },
+  btnRed:{
+      borderColor: '#cc0000'
+  },
+  btnText: {
+      fontWeight: 'bold', 
+      padding:8, 
+      textAlign: 'right',
+      fontSize: responsiveFontSize(1.8),
+      justifyContent: 'center', 
+      alignItems: 'center',
+      flex:1
+  },
+  btnTextGreen: {
+      color:'#2d9500', 
+  },
+  btnTextBlue: {
+      color: '#4674B7'
+  },
+  btnTextRed: {
+      color: '#cc0000'
+  },
+  btnIconSmall: {
+      justifyContent: 'center', 
+      alignItems: 'center',
+      flex:1,
+      fontSize:responsiveFontSize(1.8)
+  }
+});
 
 
 export default Comunication;

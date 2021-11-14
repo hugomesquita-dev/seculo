@@ -15,6 +15,8 @@ import {
 const leiaMais = (string, limite) => {
   if(string.length > limite){
     return string.substring(0, limite).concat("...");
+  }else{
+    return string;
   }
 }
 
@@ -36,9 +38,9 @@ class HeaderSelectUser extends React.Component {
 
   };
 
-  componentDidUpdate = () => {
+  // componentDidUpdate = () => {
    
-  }
+  // }
 
   toggleModal = () => {
     this.setState({
@@ -128,7 +130,7 @@ class HeaderSelectUser extends React.Component {
             style={{width: 30, height: 30}}
             source={require('../../../assets/images/user-select.png')}
           />
-          <Text style={{fontSize: 12, fontWeight:'bold'}}>{this.state.student}</Text>
+          <Text style={{fontSize: 12, fontWeight:'bold'}}>{leiaMais(this.state.student,25)}</Text>
           
           <Icon name="angle-down" size={25} />
         </TouchableOpacity>

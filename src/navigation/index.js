@@ -58,6 +58,8 @@ import Solicitacion from '../screens/solicitacion';
 import Messages from '../screens/messages';
 import detailsAlert from '../screens/alert/detailsAlert';
 import Registration from '../screens/alert/registration';
+import detailsMenssages from '../screens/messages/detailsMenssages';
+
 
 const Stack = createStackNavigator();
 
@@ -108,6 +110,7 @@ class Navigation extends React.Component {
         <Stack.Screen name="Messages" component={Messages} />
         <Stack.Screen name="detailsAlert" component={detailsAlert} />
         <Stack.Screen name="Registration" component={Registration} />
+        <Stack.Screen name="detailsMenssages" component={detailsMenssages} />
 
 
         <Stack.Screen

@@ -95,14 +95,19 @@ const detailsAlert = ({route, navigation}) => {
 
     renderCheckboxes = () => {
     
-        return Dados.map((item, key) =>{
+        return Dados.map(item =>{
             return(
                 <TouchableOpacity 
-                    onPress={() => {this.onchecked(key)}}
-                    key={key} style={styles.boxitem}>
-                    {item.checked == true
-                    ? (<CheckBox />)
-                    : (<CheckBox disabled={false}/>)}
+                    onPress={() => {this.onchecked(item.id)}}
+                    key={item.id} style={styles.boxitem}>
+                    {/* {item.checked == true
+                    ? (<CheckBox value={item.checked} disabled={false} onValueChange={() => {this.onchecked(item.id)}}/>)
+                    : (<CheckBox disabled={false}/>)} */}
+                    {/*corrigir */}
+                    <CheckBox value={item.checked} 
+                             onValueChange={()=>{this.onchecked(item.id)}}/>
+                       
+
                     <Text style={styles.checktext}>{item.nome}</Text>
                 </TouchableOpacity>
             )
@@ -121,6 +126,7 @@ const detailsAlert = ({route, navigation}) => {
     }
     
     getSelectedDados = (opcao) => {
+
         //let Alunos = this.state.Data
         var keys = Dados.map((t) => t.id)
         var checks = Dados.map((t) => t.checked)
@@ -133,27 +139,37 @@ const detailsAlert = ({route, navigation}) => {
 
         //convertendo array para string
         let SelectedItem = Selected.toString();
+        if(SelectedItem == 'undefined' || SelectedItem.length == 0){
+            alert('Selecione um Aluno');
+        }else{
+
+            if(opcao == 'S'){
+                api.post('/matricula/confPesquisa/', {
+                    p_cd_usuario_aluno: SelectedItem,
+                    p_cd_usuario_resp: cpf_responsavel,
+                    p_idperlet_prox: 3  
+    
+                })
+                .then((res) => {
+                    alert(res.data[0].mensagem)
+                    navigation.navigate('Dashboard');
+                })
+    
+                
+                //alert(SelectedItem);
+                //alert(cpf_responsavel);
+            }else{
+                //alert('Confirmação não Efetuada!');
+                navigation.navigate('Dashboard');
+            }
+
+        }
 
         //criar api
         // realizar update para a base dados inserir o ra e codusuario que confirmou a reserva da matricula
-        if(opcao == 'S'){
-            api.post('/matricula/confPesquisa/', {
-                p_cd_usuario_aluno: SelectedItem,
-                p_cd_usuario_resp: cpf_responsavel,
-                p_idperlet_prox: 3  
+        
 
-            })
-            .then((res) => {
-                alert(res.data[0].mensagem)
-            })
-
-            
-            //alert(SelectedItem);
-            //alert(cpf_responsavel);
-        }else{
-            alert('Confirmação não Efetuada!');
-            navigation.navigate('Dashboard');
-        }
+        
         //alert(Alunos[0].value);
         //redireciona 
         //navigation.navigate('Dashboard');
