@@ -164,7 +164,7 @@ class BoletosComponent extends React.Component {
             </View>
 
 
-            <View
+            {/* <View
               style={{
                 flexDirection: 'column',
                 paddingHorizontal: 10,
@@ -190,7 +190,8 @@ class BoletosComponent extends React.Component {
                   </Text>
                 </View>
               </View>
-            </View>
+              
+            </View> */}
             
             {/* <View><Text>{console.log(this.state.mensalidades['CODIGO'])}</Text></View> */}
 

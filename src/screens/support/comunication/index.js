@@ -60,7 +60,7 @@ class Comunication extends React.Component {
       })
       .then((res) => {
 
-        console.log("Comunicados: " + JSON.stringify(res.data))
+        //console.log("Comunicados: " + JSON.stringify(res.data))
         if (res.data.length > 0) {
 
           this.setState({
@@ -139,12 +139,12 @@ class Comunication extends React.Component {
                       
                        <View style={styles.box}>
                           <View style={{flex:2, flexDirection: 'row'}}>
-                              <View style={{flex:2, paddingRight: 10}}>
-                                  <Text style={styles.boxTitle}>{itemComunicado.item.TITULO} </Text>
-                                  <Text style={styles.boxTitleDisc}>{itemComunicado.item.DISCIPLINA}</Text>
-                                  
+                              <View style={{paddingRight: 30}}>
+                                  <Text style={[styles.boxTitle]}>{itemComunicado.item.TITULO} </Text>
                                   
                               </View>
+                              <Text style={{flex:1, alignSelf: "flex-end", position:'absolute', right: 0, top:0}}> <Icon name="star" size={30}  style={[styles.btnTextYellow, styles.btnIconSmall]}/></Text>
+                                 
                               <View style={{flex:1.2}}>
                                   {itemComunicado.item.FLG_ACAO == 'CONCLUIDO' && <Text style={styles.btn}><Text style={[styles.btnText, styles.btnTextGreen]}>{itemComunicado.item.FLG_ACAO}</Text> <Icon name="check" size={25}  style={[styles.btnTextGreen, styles.btnIconSmall]}/></Text>}
                                   {itemComunicado.item.FLG_ACAO == 'FAZER' && <Text style={styles.btn}><Text style={[styles.btnText, styles.btnTextBlue]}>{itemComunicado.item.FLG_ACAO}</Text> <Icon name="exclamation" size={25}  style={[styles.btnTextBlue, styles.btnIconSmall]}/></Text>}
@@ -241,6 +241,9 @@ const styles = StyleSheet.create({
   },
   btnTextBlue: {
       color: '#4674B7'
+  },
+  btnTextYellow: {
+    color: '#f1c232'
   },
   btnTextRed: {
       color: '#cc0000'

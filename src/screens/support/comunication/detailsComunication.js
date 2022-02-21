@@ -157,7 +157,7 @@ const detailsComunication = ({route, navigation}) => {
                         
                         {anexo && tipo_notificacao == 'COMUNICADO' &&
                         <View style={{flex:1, flexDirection: 'column'}}>
-                            <Text style={[styles.title, styles.boxLeft]}>{titulo}</Text>
+                            <Text style={[styles.title]}>{titulo}</Text>
                             <Text style={styles.content}>{conteudo}</Text>
                             {/* <Text>{extImage[0]}</Text> */}
 
@@ -165,10 +165,12 @@ const detailsComunication = ({route, navigation}) => {
                             {extImage.indexOf(anexo.split(".")[1]) > -1 && 
                             <Image 
                                 source={{uri: 'https://seculomanaus.com.br/componentes/portal/arquivos/'+anexo}}
-                                style={{width: '100%', height: 400, flex:1}} 
-                                resizeMode={'cover'}
+                                style={{width: '100%', height: 500, flex:1, marginTop:'-10%'}} 
+                                resizeMode={'contain'}
                             />
                             }
+
+
 
                             
                             {/* se existir anexo do tipo arquivo */}
@@ -466,6 +468,7 @@ const styles = StyleSheet.create({
         color: '#4674B7',
         fontWeight: 'bold',
         fontSize: responsiveFontSize(2),
+        flex: 1,
     },
     shared:{
         fontSize:12

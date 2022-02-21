@@ -54,6 +54,8 @@ import EvaluationTemplates from '../screens/evaluation-templates';
 import BoletimFrequence from '../screens/boletim'
 import BoletosComponent from '../screens/boletos'
 import AcompanhamentoInfantil from '../screens/infantil'
+
+import Manual from '../screens/manual';
 import Solicitacion from '../screens/solicitacion';
 import Messages from '../screens/messages';
 import detailsAlert from '../screens/alert/detailsAlert';
@@ -107,6 +109,8 @@ class Navigation extends React.Component {
         <Stack.Screen name="BoletimFrequence" component={BoletimFrequence} />
         <Stack.Screen name="BoletosComponent" component={BoletosComponent} />
         <Stack.Screen name="AcompanhamentoInfantil" component={AcompanhamentoInfantil} />
+
+        <Stack.Screen name="Manual" component={Manual} />
         <Stack.Screen name="Messages" component={Messages} />
         <Stack.Screen name="detailsAlert" component={detailsAlert} />
         <Stack.Screen name="Registration" component={Registration} />

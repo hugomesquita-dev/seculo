@@ -3,10 +3,14 @@ import {
   ScrollView,
   View,
   Text,
+  TextInput,
   Image,
   TouchableOpacity,
   FlatList,
   ActivityIndicator,
+  StyleSheet,
+  Dimensions,
+  Platform
 } from 'react-native';
 import { connect } from 'react-redux';
 
@@ -15,11 +19,17 @@ import api from '../../config/api';
 import Header from '../../components/ui/header';
 import HeaderAuthenticated from '../../components/ui/header-authenticated';
 import HeaderSelectUser from '../../components/ui/header-select-user';
+import {
+  responsiveFontSize
+} from "react-native-responsive-dimensions";
+let { height } = Dimensions.get("window");
 
 class AcompanhamentoInfantil extends React.Component {
   state = {
     acompanhamento: {},
-    loading: true
+    loading: true,
+    ativa: false,
+    text: ""
   };
 
   componentDidMount = async () => {
@@ -89,9 +99,24 @@ class AcompanhamentoInfantil extends React.Component {
       });
   };
 
+  toggleTextArea = () => {
+    this.setState({
+      ativa: !this.state.ativa
+    })
+  }
+
+  responder = () => {
+    //criar uma requisição axios
+    //só pode responder uma vez por dia
+    let mensagem = this.state.text;
+
+    alert("Mensagem enviada");
+  }
+
   render() {
     return (
-      <ScrollView>
+      <View  style={{height: height}}>
+      <ScrollView> 
         <View style={{ flex: 1, backgroundColor: '#f1f1f2' }}>
           <Header navigation={this.props.navigation} />
           <HeaderAuthenticated />
@@ -117,7 +142,7 @@ class AcompanhamentoInfantil extends React.Component {
             <HeaderSelectUser />
           </View>
 
-          <View style={{ paddingHorizontal: 40 }}>
+          <View style={{ paddingHorizontal: 30, paddingBottom: Platform.OS === 'android' ? 15 : 80 }}>
 
             {this.state.loading && <ActivityIndicator size="large" color="#4674B7" />}
 
@@ -334,11 +359,53 @@ class AcompanhamentoInfantil extends React.Component {
                       </Text>
                     </View>
                 </View>
+                
+
+
+                <View style={styles.boxTitle}>
+                  <Text style={styles.textTitle}>Detalhe</Text> 
+                </View>
+                <View style={styles.boxObs}>
+                  <Text style={styles.textObs}>{this.state.acompanhamento.OBSERVACAO}</Text>
+                </View>
+
+                {/* <View style={styles.boxResposta}>
+                  <Text style={styles.boxRespostaText}>Resposta do pai</Text>
+                </View> */}
+
+
+                <View>
+                  <TouchableOpacity
+                  onPress={()=>{this.toggleTextArea()}}
+                  style={styles.boxBtn}>
+                    <Text style={styles.textBtn}>Responder</Text>
+                  </TouchableOpacity>
+                </View>
+
+
+
+                {this.state.ativa == true &&
+                <View>
+                  <TextInput style={styles.textarea} 
+                            multiline={true} placeholder="..."
+                            onChangeText={(text) => this.setState({text})}
+                            value={this.state.text}/>
+                  <TouchableOpacity
+                  onPress={()=>{this.responder()}}
+                  style={styles.boxBtn}>
+                    <Text style={styles.textBtn}>Enviar Mensagem</Text>
+                  </TouchableOpacity>
+                </View>
+                }
+
+
+
 
             </View>
           </View>
         </View>
       </ScrollView>
+      </View>
     );
   }
 }
@@ -347,5 +414,66 @@ const mapStateToProps = (state) => ({
   auth: state.auth,
   students: state.students,
 });
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor:'red'
+  },
+  textarea:{
+    backgroundColor: '#FFFFFF',
+    padding:'2%',
+    height: '30%',
+    justifyContent: 'flex-start',
+    borderColor: '#DDDDDD',
+    borderWidth: 1,
+    borderRadius: 10
+  },
+  boxBtn: {
+    backgroundColor: '#4F74B2',
+    color:'#FFFFFF',
+    borderRadius:10,
+    paddingHorizontal: 10,
+    paddingVertical:10,
+    marginVertical: '5%'
+  },
+  textBtn:{
+    color:'#FFFFFF',
+    textAlign: 'center',
+    fontSize: responsiveFontSize(2)
+  },
+  boxTitle:{
+    marginVertical: '2%',
+  },
+  boxObs:{
+    borderColor: '#DDDDDD',
+    borderWidth: 1,
+    borderRadius: 10,
+    backgroundColor: '#FFFFFF',
+    paddingVertical: '5%'
+  },
+  boxResposta: {
+    backgroundColor: '#abc6f3',
+    paddingVertical: '5%',
+    borderWidth: 1,
+    borderRadius: 10,
+    borderColor: '#86a1cf',
+    color: '#111111',
+    marginTop: '5%'
+  },
+  boxRespostaText: {
+    textAlign: 'center',
+    fontSize: responsiveFontSize(2)
+  },
+  textTitle:{
+    fontSize: responsiveFontSize(2),
+    color: '#4674B7',
+    fontWeight: 'bold'
+  },
+  textObs: {
+    color: '#111111',
+    textAlign: 'center',
+    fontSize: responsiveFontSize(2)
+  }
+})
 
 export default connect(mapStateToProps)(AcompanhamentoInfantil);

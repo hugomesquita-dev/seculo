@@ -53,7 +53,6 @@ class PurchaseCredits extends React.Component {
 
     const URL = "https://seculomanaus.com.br/componentes/portal/pagamento/inicio?Context=[CodSistema=S;CodUsuario=" + user.USU_LOGIN + ";]";
     return (
-
       <ScrollView
         contentContainerStyle={{
           flex: 1,
@@ -78,6 +77,7 @@ class PurchaseCredits extends React.Component {
           </View>
         </View>
       </ScrollView>
+      
 
       // <Container>
       //   <Header navigation={this.props.navigation} />

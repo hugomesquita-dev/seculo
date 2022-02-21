@@ -120,7 +120,6 @@ class Dashboard extends Component {
 
 
   componentDidMount = () =>{
-
     try{
 
       messaging()
@@ -246,6 +245,24 @@ class Dashboard extends Component {
         done: false,
         roles: ['responsavel'],
       },
+      {
+        id: '13',
+        name: 'MANUAL DO ALUNO',
+        //image: require('../../assets/images/balance.png'),
+        image: <Icon name="man" size={25} color="#4674b7"/>,
+        navigation: 'Manual',
+        done: false,
+        roles: ['responsavel'],
+      },
+      // {
+      //   id: '13',
+      //   name: 'ENFERMARIA',
+      //   //image: require('../../assets/images/balance.png'),
+      //   image: <Icon name="medicinebox" size={25} color="#4674b7"/>,
+      //   navigation: 'Manual',
+      //   done: false,
+      //   roles: ['responsavel'],
+      // },
       /*{
         id: '14',
         name: 'RECADOS',
@@ -318,7 +335,7 @@ class Dashboard extends Component {
         <View style={{backgroundColor: '#F1F1F2', flex: 1}}>
           <Header navigation={this.props.navigation} />
           <HeaderAuthenticated />
-          
+
           <Alert navigation={this.props.navigation}/>      
 
 
@@ -337,18 +354,22 @@ class Dashboard extends Component {
                 if (item.empty) {
                   return <View style={[styles.item, styles.itemEmpty]} />;
                 }
+                
+          
 
                 if (
                   typeof item.roles !== 'undefined' &&
                   item.roles.includes(this.props.auth.user.USU_TIPO)
                 ) {
                   return (
+
+
                     <TouchableOpacity
                       key={item.id}
                       style={[styles.item]}
-                      onPress={() =>
-                        this.props.navigation.navigate(item.navigation)
-                      }>
+                      
+                      onPress={() => this.props.navigation.navigate(item.navigation)}
+                      >
                       <View
                         style={{
                           padding: 10,
@@ -371,11 +392,27 @@ class Dashboard extends Component {
                       </View>
                       <Text style={item.id == 12 ? styles.colorFin : styles.text}>{item.name}</Text>
                     </TouchableOpacity>
+                    
                   );
                 }
               }}
             />
             
+            {/*<TouchableOpacity style={[styles.itemPersonalizado]} onPress={() => Linking.openURL('https://seculomanaus.com.br/manual/aluno.pdf')}>
+            <View style={{padding: 10,
+                          backgroundColor: '#F1F1F2',
+                          borderRadius: 60,
+                          marginBottom: 8,
+                          flexShrink: 1,
+                        }}>
+              <Text><Icon name="man" size={25} color="#ED695F"/></Text>
+            </View>
+            <Text style={styles.colorFin}>MANUAL DO ALUNO</Text>
+                      </TouchableOpacity>*/}
+
+
+
+
           </View>
 
           {/* <View style={{backgroundColor:'#4674b7', flex:1, height:60, marginVertical:40,
@@ -584,6 +621,22 @@ class Dashboard extends Component {
  */
 
 const styles = StyleSheet.create({
+  itemPersonalizado: {
+    borderRadius: 10,
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#E8E8E8',
+    flexGrow: 1,
+    marginHorizontal: 8,
+    marginBottom: 15,
+    flexBasis: 0,
+    minHeight: 100,
+    padding:8,
+    paddingVertical: 10,
+    backgroundColor: '#fff',
+    flexShrink: 1,
+    //width:120
+  },
   item: {
     borderRadius: 10,
     alignItems: 'center',
