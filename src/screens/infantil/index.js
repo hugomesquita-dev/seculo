@@ -10,7 +10,11 @@ import {
   ActivityIndicator,
   StyleSheet,
   Dimensions,
-  Platform
+  Platform,
+  KeyboardAvoidingView,
+  TouchableWithoutFeedback,
+  Keyboard ,
+  Alert
 } from 'react-native';
 import { connect } from 'react-redux';
 
@@ -105,19 +109,43 @@ class AcompanhamentoInfantil extends React.Component {
     })
   }
 
-  responder = () => {
-    //criar uma requisição axios
-    //só pode responder uma vez por dia
-    let mensagem = this.state.text;
 
-    alert("Mensagem enviada");
+
+  responder = async () => {
+    let p_mensagem = this.state.text;
+    await api
+      .post('/acompanhamento/sendAcompanhamentoInfantil/',{
+        p_cd_usuario: this.props.students.student.RA,
+        p_mensagem: p_mensagem
+      }).then((res) => {
+
+        Alert.alert("Século",
+                    res.data[0].mensagem,
+                    [
+                      {
+                        text: "Cancelar"
+                      },
+                      {
+                        text: "Ok"
+                      }
+                    ]);
+      
+      }).catch((err) =>{
+        alert("Erro ao carregar os dados.");
+        this.setState({
+          loading: false
+        });
+      });
+
+    //alert("Mensagem enviada");
   }
 
   render() {
     return (
-      <View  style={{height: height}}>
-      <ScrollView> 
-        <View style={{ flex: 1, backgroundColor: '#f1f1f2' }}>
+      <KeyboardAvoidingView style={{ flex: 1, flexDirection: 'column',justifyContent: 'center'}} behavior="position" enabled   keyboardVerticalOffset={30}>
+      <ScrollView>
+      
+        <View style={{backgroundColor: '#f1f1f2' }}>
           <Header navigation={this.props.navigation} />
           <HeaderAuthenticated />
           <View
@@ -142,236 +170,136 @@ class AcompanhamentoInfantil extends React.Component {
             <HeaderSelectUser />
           </View>
 
-          <View style={{ paddingHorizontal: 30, paddingBottom: Platform.OS === 'android' ? 15 : 80 }}>
+          <View style={{ paddingHorizontal: 30, paddingBottom: Platform.OS === 'android' ? 15 : 110 }}>
 
             {this.state.loading && <ActivityIndicator size="large" color="#4674B7" />}
 
             <View style={{ marginTop: 20 }}>
 
-               <View
-                    style={{
-                      justifyContent: 'space-between',
-                      flexDirection: 'row',
-                      paddingBottom: 15,
-                      borderBottomWidth: 1,
-                      borderBottomColor: '#c1c1c1',
-                      alignItems: 'center',
-                      marginBottom: 10,
-                    }}>
+                {/** modificado */}
+                <View style={styles.boxCard}>
 
-                    <View >
-                        <Text
-                        style={{
-                          fontSize: 16,
-                          color: '#1A2541',
-                          fontWeight: 'bold',
-                        }}>
-                        LANCHE DA MANHÃ
-                      </Text>
-
-                      <Text
-                        style={{
-                          fontSize: 13,
-                          color: '#1A2541',
-                        }}>
-                        {this.state.acompanhamento.OBS_COLACAO}
-                      </Text>
-
+                    <View style={styles.boxCard_Row}>
+                        <Text style={styles.boxCard_Title}>LANCHE DA MANHÃ</Text>
+                        <View style={styles.boxCard_Border}>
+                          <Text
+                            style={styles.boxCard_Border_Title}>
+                            {this.state.acompanhamento.COLACAO != null ? this.state.acompanhamento.COLACAO : '-'}
+                          </Text>
+                        </View>
                     </View>
 
-                    <View >
-                      <Text
-                        style={{
-                          fontSize: 13,
-                          color: '#1A2541',
-                        }}>
-                        {this.state.acompanhamento.COLACAO != null ? this.state.acompanhamento.COLACAO : '-'}
-                      </Text>
+                    <View style={{marginVertical:10}}>
+                      <Text style={styles.boxCard_Text}>{this.state.acompanhamento.OBS_COLACAO}</Text>
+                    </View>
+
+                </View>
+
+
+
+                {/** modificado */}
+                <View style={styles.boxCard}>
+
+                    <View style={styles.boxCard_Row}>
+                        <Text style={styles.boxCard_Title}>ALMOÇO</Text>
+                      
+                        <View style={styles.boxCard_Border}>
+                          <Text
+                            style={styles.boxCard_Border_Title}>
+                            {this.state.acompanhamento.ALMOCO != null ? this.state.acompanhamento.ALMOCO : '-'}
+                          </Text>
+                        </View>
+                    </View>
+
+
+                    <View style={{marginVertical:10}}>
+                      <Text style={styles.boxCard_Text}>{this.state.acompanhamento.OBS_ALMOCO}</Text>
                     </View>
                 </View>
 
 
-                <View
-                    style={{
-                      justifyContent: 'space-between',
-                      flexDirection: 'row',
-                      paddingBottom: 15,
-                      borderBottomWidth: 1,
-                      borderBottomColor: '#c1c1c1',
-                      alignItems: 'center',
-                      marginBottom: 10,
-                    }}>
+                {/** modificado */}
+                <View style={styles.boxCard}>
 
-                    <View >
-                        <Text
-                        style={{
-                          fontSize: 16,
-                          color: '#1A2541',
-                          fontWeight: 'bold',
-                        }}>
-                        ALMOÇO
-                      </Text>
-
-                      <Text
-                        style={{
-                          fontSize: 13,
-                          color: '#1A2541',
-                        }}>
-                        {this.state.acompanhamento.OBS_ALMOCO}
-                      </Text>
-
+                    <View style={styles.boxCard_Row}>
+                        <Text style={styles.boxCard_Title}>LANCHE DA TARDE</Text>
+                        <View style={styles.boxCard_Border}>
+                          <Text
+                            style={styles.boxCard_Border_Title}>
+                            {this.state.acompanhamento.LANCHE != null ? this.state.acompanhamento.LANCHE : '-'}
+                          </Text>
+                        </View>
                     </View>
 
-                    <View >
-                      <Text
-                        style={{
-                          fontSize: 13,
-                          color: '#1A2541',
-                        }}>
-                        {this.state.acompanhamento.ALMOCO != null ? this.state.acompanhamento.ALMOCO : '-'}
-                      </Text>
+                    <View style={{marginVertical:10}}>
+                      <Text style={styles.boxCard_Text}>{this.state.acompanhamento.OBS_LANCHE}</Text>
                     </View>
+
                 </View>
 
-                <View
-                    style={{
-                      justifyContent: 'space-between',
-                      flexDirection: 'row',
-                      paddingBottom: 15,
-                      borderBottomWidth: 1,
-                      borderBottomColor: '#c1c1c1',
-                      alignItems: 'center',
-                      marginBottom: 10,
-                    }}>
+                
+                {/** modificado */}
+                <View style={styles.boxCard}>
 
-                    <View >
-                        <Text
-                        style={{
-                          fontSize: 16,
-                          color: '#1A2541',
-                          fontWeight: 'bold',
-                        }}>
-                        LANCHE DA TARDE
-                      </Text>
-
-                      <Text
-                        style={{
-                          fontSize: 13,
-                          color: '#1A2541',
-                        }}>
-                        {this.state.acompanhamento.OBS_LANCHE}
-                      </Text>
-
+                    <View style={styles.boxCard_Row}>
+                        <Text style={styles.boxCard_Title}>SONO</Text>
+                        <View style={styles.boxCard_Border}>
+                          <Text
+                            style={styles.boxCard_Border_Title}>
+                            {this.state.acompanhamento.SONO != null ? this.state.acompanhamento.SONO : '-'}
+                          </Text>
+                        </View>
                     </View>
 
-                    <View >
-                      <Text
-                        style={{
-                          fontSize: 13,
-                          color: '#1A2541',
-                        }}>
-                        {this.state.acompanhamento.LANCHE != null ? this.state.acompanhamento.LANCHE : '-'}
-                      </Text>
-                    </View>
-                </View>
-
-                <View
-                    style={{
-                      justifyContent: 'space-between',
-                      flexDirection: 'row',
-                      paddingBottom: 15,
-                      borderBottomWidth: 1,
-                      borderBottomColor: '#c1c1c1',
-                      alignItems: 'center',
-                      marginBottom: 10,
-                    }}>
-
-                    <View >
-                        <Text
-                        style={{
-                          fontSize: 16,
-                          color: '#1A2541',
-                          fontWeight: 'bold',
-                        }}>
-                        SONO
-                      </Text>
-
-                      <Text
-                        style={{
-                          fontSize: 13,
-                          color: '#1A2541',
-                        }}>
-                        {this.state.acompanhamento.OBS_SONO}
-                      </Text>
-
+                    <View style={{marginVertical:10}}>
+                      <Text style={styles.boxCard_Text}>{this.state.acompanhamento.OBS_SONO}</Text>
                     </View>
 
-                    <View >
-                      <Text
-                        style={{
-                          fontSize: 13,
-                          color: '#1A2541',
-                        }}>
-                        {this.state.acompanhamento.SONO != null ? this.state.acompanhamento.SONO : '-'}
-                      </Text>
-                    </View>
                 </View>
 
 
-                <View
-                    style={{
-                      justifyContent: 'space-between',
-                      flexDirection: 'row',
-                      paddingBottom: 15,
-                      borderBottomWidth: 1,
-                      borderBottomColor: '#c1c1c1',
-                      alignItems: 'center',
-                      marginBottom: 10,
-                    }}>
 
-                    <View >
-                        <Text
-                        style={{
-                          fontSize: 16,
-                          color: '#1A2541',
-                          fontWeight: 'bold',
-                        }}>
-                        EVACUAÇÃO
-                      </Text>
+                {/** modificado */}
+                <View style={styles.boxCard}>
 
-                      <Text
-                        style={{
-                          fontSize: 13,
-                          color: '#1A2541',
-                        }}>
-                        {this.state.acompanhamento.OBS_EVACUACAO}
-                      </Text>
-
+                    <View style={styles.boxCard_Row}>
+                        <Text style={styles.boxCard_Title}>EVACUAÇÃO</Text>
+                        <View style={styles.boxCard_Border}>
+                          <Text
+                            style={styles.boxCard_Border_Title}>
+                            {this.state.acompanhamento.EVACUACAO != null ? this.state.acompanhamento.EVACUACAO : '-'}
+                          </Text>
+                        </View>
                     </View>
 
-                    <View >
-                      <Text
-                        style={{
-                          fontSize: 13,
-                          color: '#1A2541',
-                        }}>
-                        {this.state.acompanhamento.EVACUACAO != null ? this.state.acompanhamento.EVACUACAO : '-'}
-                      </Text>
+                    <View style={{marginVertical:10}}>
+                      <Text style={styles.boxCard_Text}>{this.state.acompanhamento.OBS_EVACUACAO}</Text>
                     </View>
+
                 </View>
                 
 
 
+               
+                
+
+
                 <View style={styles.boxTitle}>
-                  <Text style={styles.textTitle}>Detalhe</Text> 
+                  <Text style={styles.textTitle}>Informativo Diário</Text> 
                 </View>
                 <View style={styles.boxObs}>
                   <Text style={styles.textObs}>{this.state.acompanhamento.OBSERVACAO}</Text>
                 </View>
 
-                {/* <View style={styles.boxResposta}>
-                  <Text style={styles.boxRespostaText}>Resposta do pai</Text>
-                </View> */}
+
+                <View style={styles.boxTitle}>
+                  <Text style={styles.textTitle}>Responsável</Text> 
+                </View>
+                <View style={styles.boxResposta}>
+                  <Text style={styles.boxRespostaText}>
+                    {this.state.acompanhamento.OBSERVACAO_RESP}
+                  </Text>
+                </View> 
 
 
                 <View>
@@ -385,7 +313,7 @@ class AcompanhamentoInfantil extends React.Component {
 
 
                 {this.state.ativa == true &&
-                <View>
+                <View> 
                   <TextInput style={styles.textarea} 
                             multiline={true} placeholder="..."
                             onChangeText={(text) => this.setState({text})}
@@ -404,8 +332,9 @@ class AcompanhamentoInfantil extends React.Component {
             </View>
           </View>
         </View>
-      </ScrollView>
-      </View>
+        
+        </ScrollView>
+      </KeyboardAvoidingView>
     );
   }
 }
@@ -417,12 +346,46 @@ const mapStateToProps = (state) => ({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor:'red'
+    flex: 1
+  },
+  boxCard: {
+    justifyContent: 'space-between',
+    flexDirection: 'column',
+    padding: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: '#c1c1c1',
+    marginBottom: 10,
+    backgroundColor: '#FFF',
+    borderRadius:6
+  },
+  boxCard_Row: {
+    flex:1, 
+    flexDirection:'row', 
+    justifyContent: 'space-between'
+  },
+  boxCard_Title: {
+    fontSize: 16,
+    color: '#1A2541',
+    fontWeight: 'bold',
+  },
+  boxCard_Border:{
+    backgroundColor: '#E6BD56', 
+    borderRadius:6
+  },
+  boxCard_Border_Title:{
+    fontSize: 13,
+    color: '#fff',
+    fontWeight: 'bold',
+    padding:5
+  },
+  boxCard_Text: {
+    fontSize: 13,
+    color: '#1A2541',
   },
   textarea:{
     backgroundColor: '#FFFFFF',
     padding:'2%',
-    height: '30%',
+    height: '20%',
     justifyContent: 'flex-start',
     borderColor: '#DDDDDD',
     borderWidth: 1,
@@ -442,26 +405,26 @@ const styles = StyleSheet.create({
     fontSize: responsiveFontSize(2)
   },
   boxTitle:{
-    marginVertical: '2%',
+    marginVertical:10,
   },
   boxObs:{
     borderColor: '#DDDDDD',
     borderWidth: 1,
     borderRadius: 10,
     backgroundColor: '#FFFFFF',
-    paddingVertical: '5%'
+    padding: 10
   },
   boxResposta: {
-    backgroundColor: '#abc6f3',
-    paddingVertical: '5%',
+    backgroundColor: '#D7E6FF',
+    padding: 10,
     borderWidth: 1,
     borderRadius: 10,
-    borderColor: '#86a1cf',
+    borderColor: '#93B7F3',
     color: '#111111',
-    marginTop: '5%'
+    marginTop: 10
   },
   boxRespostaText: {
-    textAlign: 'center',
+    textAlign: 'justify',
     fontSize: responsiveFontSize(2)
   },
   textTitle:{
@@ -471,8 +434,9 @@ const styles = StyleSheet.create({
   },
   textObs: {
     color: '#111111',
-    textAlign: 'center',
-    fontSize: responsiveFontSize(2)
+    textAlign: 'justify',
+    fontSize: responsiveFontSize(2),
+    padding:5
   }
 })
 

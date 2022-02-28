@@ -24,7 +24,7 @@ import {
   } from "react-native-responsive-dimensions";
 
 let { width, height } = Dimensions.get("window");
-let user
+//let user
 
 const init = async function (a, b) {
   user = JSON.parse(await AsyncStorage.getItem('@seculo/user'));
@@ -155,7 +155,7 @@ class Comunication extends React.Component {
                           <View>
                             <Text style={styles.boxContent}>{leiaMais(itemComunicado.item.MENSAGEM,100)}</Text>
                             <Text style={styles.contentDate}>
-                                {itemComunicado.item.DT_NOTIFICAR}
+                                {itemComunicado.item.DT_NOTIFICAR} - {itemComunicado.item.HORARIO}
                             </Text>
                           </View>
                        </View>

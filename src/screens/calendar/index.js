@@ -36,6 +36,7 @@ class CalendarPage extends React.Component {
     allEvents: []
   };
 
+
   componentDidMount = () => {
 
     console.log(" ALUNO TURMA: " + this.props.students.student.TURMA)
