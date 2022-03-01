@@ -32,6 +32,7 @@ class AcompanhamentoInfantil extends React.Component {
   state = {
     acompanhamento: {},
     loading: true,
+    loading_btn: false,
     ativa: false,
     text: ""
   };
@@ -112,6 +113,11 @@ class AcompanhamentoInfantil extends React.Component {
 
 
   responder = async () => {
+
+    this.setState({
+      loading_btn: true,
+    });
+
     let p_mensagem = this.state.text;
     await api
       .post('/acompanhamento/sendAcompanhamentoInfantil/',{
@@ -129,7 +135,10 @@ class AcompanhamentoInfantil extends React.Component {
                         text: "Ok"
                       }
                     ]);
-      
+        this.setState({
+          loading_btn: false,
+        });
+
       }).catch((err) =>{
         alert("Erro ao carregar os dados.");
         this.setState({
@@ -142,7 +151,7 @@ class AcompanhamentoInfantil extends React.Component {
 
   render() {
     return (
-      <KeyboardAvoidingView style={{ flex: 1, flexDirection: 'column',justifyContent: 'center'}} behavior="position" enabled   keyboardVerticalOffset={30}>
+      <KeyboardAvoidingView style={{ flex: 1, flexDirection: 'column',justifyContent: 'center'}} behavior="position" enabled   keyboardVerticalOffset={10}>
       <ScrollView>
       
         <View style={{backgroundColor: '#f1f1f2' }}>
@@ -292,38 +301,49 @@ class AcompanhamentoInfantil extends React.Component {
                 </View>
 
 
-                <View style={styles.boxTitle}>
-                  <Text style={styles.textTitle}>Responsável</Text> 
-                </View>
-                <View style={styles.boxResposta}>
-                  <Text style={styles.boxRespostaText}>
-                    {this.state.acompanhamento.OBSERVACAO_RESP}
-                  </Text>
-                </View> 
 
 
-                <View>
+
+                
+
+
+                {/* <View>
                   <TouchableOpacity
                   onPress={()=>{this.toggleTextArea()}}
                   style={styles.boxBtn}>
                     <Text style={styles.textBtn}>Responder</Text>
                   </TouchableOpacity>
-                </View>
+                </View> */}
 
 
 
-                {this.state.ativa == true &&
+                {this.state.acompanhamento.OBSERVACAO_RESP == null 
+                ?
                 <View> 
                   <TextInput style={styles.textarea} 
-                            multiline={true} placeholder="..."
+                            multiline={true} placeholder="Responder..."
                             onChangeText={(text) => this.setState({text})}
                             value={this.state.text}/>
                   <TouchableOpacity
                   onPress={()=>{this.responder()}}
                   style={styles.boxBtn}>
-                    <Text style={styles.textBtn}>Enviar Mensagem</Text>
+                    {this.state.loading_btn 
+                    ? <ActivityIndicator size="large" color="#FFFFFF" /> 
+                    : <Text style={styles.textBtn}>Enviar Mensagem</Text>}
+                    
                   </TouchableOpacity>
                 </View>
+                :
+                  <View>
+                    <View style={styles.boxTitle}>
+                      <Text style={styles.textTitle}>Responsável</Text> 
+                    </View>
+                    <View style={styles.boxResposta}>
+                      <Text style={styles.boxRespostaText}>
+                        {this.state.acompanhamento.OBSERVACAO_RESP}
+                      </Text>
+                    </View>
+                  </View>
                 }
 
 

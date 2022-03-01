@@ -61,17 +61,25 @@ const detailsComunication = ({route, navigation}) => {
     //         console.log("Error"+error);
     //     }
     // }
+    const autoExecLido = () => {
+        alert(`idnotificação: ${id_notificacao}`);
+        alert(`usuário: ${user.USU_LOGIN}`);
+    }
 
     
 
 
     useEffect(() => {
+
         api
         .post('notificacao/lstNotificacaoMensagem/', {
             p_id_notificacao: id_notificacao
         }).then((res) => {
+
             setLoading(false);
             setConversa(res.data);
+            
+
         })
 
        

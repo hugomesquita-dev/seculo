@@ -3,13 +3,15 @@ import {
   View,
   FlatList,
   Text,
+  Picker,
   TouchableOpacity,
   ActivityIndicator,
   ScrollView,
   Dimensions,
-  StyleSheet
+  StyleSheet,
+  Modal,
+  Alert
 } from 'react-native';
-
 import Header from '../../../components/ui/header';
 import HeaderAuthenticated from '../../../components/ui/header-authenticated';
 import Icon from 'react-native-vector-icons/AntDesign';
@@ -22,6 +24,7 @@ import {
   responsiveWidth,
   responsiveFontSize
   } from "react-native-responsive-dimensions";
+
 
 let { width, height } = Dimensions.get("window");
 //let user
@@ -47,7 +50,9 @@ class Comunication extends React.Component {
     super(props);
     this.state = {
       itens: [],
-      loading: true
+      loading: true,
+      select_option: "comunicado",
+      select_visible: false
     }
   }
 
@@ -95,12 +100,61 @@ class Comunication extends React.Component {
       });
   }
 
+  closeModal = () => {
+    // this.setState({
+    //   select_option: itemValue
+    // })
+    
+    this.setState({
+      select_visible: !this.state.select_visible 
+    })
+    
+  }
   render() {
     return (
       <ScrollView nestedScrollEnabled={true} showsVerticalScrollIndicator={true}> 
         <View style={{ flex: 1, backgroundColor: '#F1F1F2', marginBottom:65}}>
           <Header navigation={this.props.navigation} />
           <HeaderAuthenticated />
+
+         
+          <View style={{backgroundColor:"#CCC", marginTop:-2}}>
+            <TouchableOpacity style={{justifyContent:'center', alignItems: 'center', padding:10}} onPress={() => this.closeModal()}>
+                <Text>{this.state.select_option} </Text>
+            </TouchableOpacity>
+          </View>
+          
+          <Modal 
+            animationType="slide"
+            transparent={true}
+            visible={this.state.select_visible}
+            onRequestClose={() => {
+              Alert.alert("Modal fechada")
+            }}
+          
+          >
+            <View style={{flex:1}}>
+              <View style={{backgroundColor:"#FFF", width:'100%', height:'40%', position: 'absolute', bottom: 0}}>
+                <TouchableOpacity style={{justifyContent:'center', alignItems: 'center', marginTop:50}} onPress={() => this.closeModal()}>
+                    <Text>Fechar</Text>
+                </TouchableOpacity>
+                <Picker
+                  selectedValue={this.state.select_option}
+                  mode="dropdown"
+                  style={{height: 50, width: '100%'}}
+                  
+                  onValueChange={(itemValue, itemIndex) => this.setState({select_option: itemValue, select_visible: false})}>
+                  <Picker.Item label="Comunicado" value="comunicado" />
+                  <Picker.Item label="Evento" value="evento" />
+                </Picker>
+              </View>
+            </View>
+
+          </Modal>
+
+          
+
+
           <View
             style={{
               marginVertical: 15,
@@ -115,6 +169,7 @@ class Comunication extends React.Component {
               COMUNICADOS
             </Text>
           </View>
+    
 
           <View style={{ paddingHorizontal: 20, marginBottom: 20 }} >
               {this.state.loading && <ActivityIndicator size="large" color="#4674B7" />}
@@ -178,6 +233,7 @@ class Comunication extends React.Component {
 
 
 const styles = StyleSheet.create({
+  
   box: {
       borderWidth: 1,
       borderColor: '#E8E8E8',
