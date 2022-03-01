@@ -133,6 +133,7 @@ class Comunication extends React.Component {
             }}
           
           >
+            
             <View style={{flex:1}}>
               <View style={{backgroundColor:"#FFF", width:'100%', height:'40%', position: 'absolute', bottom: 0}}>
                 <TouchableOpacity style={{justifyContent:'center', alignItems: 'center', marginTop:50}} onPress={() => this.closeModal()}>
