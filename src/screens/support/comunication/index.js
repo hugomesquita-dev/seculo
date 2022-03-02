@@ -49,9 +49,20 @@ class Comunication extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      itens: [],
+      itens: [
+        { 
+          ds_content: [] //COMUNICADO
+        },
+        {
+          ds_content: [] //EVENTO
+        },
+        {
+          ds_content: [] //OCORRÊNCIA
+        }
+      ],
       loading: true,
-      select_option: "comunicado",
+      select_option: 0,
+      select_label: "COMUNICADOS",
       select_visible: false
     }
   }
@@ -66,16 +77,44 @@ class Comunication extends React.Component {
       .then((res) => {
 
         //console.log("Comunicados: " + JSON.stringify(res.data))
-        if (res.data.length > 0) {
+        // console.log(res.data[1].NM_TIPO);
+        //res.data.filter(i => console.log(i.ID_NOTIFICACAO, i.NM_TIPO));
+        //console.log(res.data.filter(i => i.NM_TIPO == "COMUNICADO"));
 
-          this.setState({
-            itens: res.data,
-            loading: false
-          })
+
+        // if (res.data.length > 0) {
           
-        } else {
-          alert("Você não tem comunicados.");
-        }
+        //   this.setState({
+        //     itens: res.data,
+        //     loading: false
+        //   })
+          
+        // } else {
+        //   alert("Você não tem comunicados.");
+        // }
+
+        this.state.itens = [
+          {
+            id: 0,
+            ds_title: "COMUNICADO",
+            ds_content: [...this.state.itens[0].ds_content, res.data.filter(i => i.NM_TIPO == "COMUNICADO")]
+          },
+          {
+            id: 1,
+            ds_title: "EVENTO",
+            ds_content: [...this.state.itens[1].ds_content, res.data.filter(i => i.NM_TIPO == "EVENTO")]
+          },
+          {
+            id: 2,
+            ds_title: "OCORRÊNCIA",
+            ds_content: [...this.state.itens[2].ds_content, res.data.filter(i => i.NM_TIPO == "OCORRÊNCIA")]
+          }
+        ]
+
+        this.setState({
+          ...this.state,
+          loading: false
+        })
 
       })
       .catch((err) => {
@@ -120,7 +159,7 @@ class Comunication extends React.Component {
          
           <View style={{backgroundColor:"#CCC", marginTop:-2}}>
             <TouchableOpacity style={{justifyContent:'center', alignItems: 'center', padding:10}} onPress={() => this.closeModal()}>
-                <Text>{this.state.select_option} </Text>
+                <Text>{this.state.select_label} </Text>
             </TouchableOpacity>
           </View>
           
@@ -140,20 +179,24 @@ class Comunication extends React.Component {
                     <Text>Fechar</Text>
                 </TouchableOpacity>
                 <Picker
-                  selectedValue={this.state.select_option}
+                  selectedValue={this.state.select_label}
                   mode="dropdown"
                   style={{height: 50, width: '100%'}}
-                  
-                  onValueChange={(itemValue, itemIndex) => this.setState({select_option: itemValue, select_visible: false})}>
-                  <Picker.Item label="Comunicado" value="comunicado" />
-                  <Picker.Item label="Evento" value="evento" />
+                  onValueChange={(itemValue, itemIndex) => this.setState({
+                                                          select_option: itemIndex, 
+                                                          select_label: itemValue,
+                                                          select_visible: false
+                                                          })}>
+                  <Picker.Item label="COMUNICADOS" value="COMUNICADOS" />
+                  <Picker.Item label="EVENTOS" value="EVENTOS" />
                 </Picker>
               </View>
             </View>
 
           </Modal>
 
-          
+          {/* {console.log("TITULO: "+this.state.itens[this.state.select_option].ds_title+"---------")} */}
+          {/* {console.log("ID: "+this.state.itens[this.state.select_option].id+"---------")} */}
 
 
           <View
@@ -167,19 +210,23 @@ class Comunication extends React.Component {
                 fontWeight: 'bold',
                 fontSize: 16,
               }}>
-              COMUNICADOS
+              COMUNICADOS 
             </Text>
           </View>
     
 
           <View style={{ paddingHorizontal: 20, marginBottom: 20 }} >
               {this.state.loading && <ActivityIndicator size="large" color="#4674B7" />}
+              {console.log(this.state.itens[0].ds_content[0])}
+              {/**  itens[modificar o state conforme o selecionado] */}
+              {console.log(`modificado ${this.state.select_option}`)}
+
 
               <View
                 scrollEnabled={true}
                 scrollIndicatorInsets={true}>
                 <FlatList
-                    data={this.state.itens}
+                    data={this.state.itens[this.state.select_option].ds_content[0]}
                     renderItem={(itemComunicado) =>
                     <TouchableOpacity 
                       key={itemComunicado.item.ID_NOTIFICACAO}
