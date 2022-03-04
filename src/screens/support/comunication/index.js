@@ -15,7 +15,11 @@ import {
 import Header from '../../../components/ui/header';
 import HeaderAuthenticated from '../../../components/ui/header-authenticated';
 import Icon from 'react-native-vector-icons/AntDesign';
+import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
+import IconFont from 'react-native-vector-icons/FontAwesome';
 Icon.loadFont();
+IconFont.loadFont();
+IconMaterial.loadFont();
 
 import api from '../../../config/api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -80,8 +84,7 @@ class Comunication extends React.Component {
         // console.log(res.data[1].NM_TIPO);
         //res.data.filter(i => console.log(i.ID_NOTIFICACAO, i.NM_TIPO));
         //console.log(res.data.filter(i => i.NM_TIPO == "COMUNICADO"));
-
-
+        
         // if (res.data.length > 0) {
           
         //   this.setState({
@@ -96,17 +99,17 @@ class Comunication extends React.Component {
         this.state.itens = [
           {
             id: 0,
-            ds_title: "COMUNICADO",
+            ds_title: "COMUNICADOS",
             ds_content: [...this.state.itens[0].ds_content, res.data.filter(i => i.NM_TIPO == "COMUNICADO")]
           },
           {
             id: 1,
-            ds_title: "EVENTO",
+            ds_title: "EVENTOS",
             ds_content: [...this.state.itens[1].ds_content, res.data.filter(i => i.NM_TIPO == "EVENTO")]
           },
           {
             id: 2,
-            ds_title: "OCORRÊNCIA",
+            ds_title: "OCORRÊNCIAS",
             ds_content: [...this.state.itens[2].ds_content, res.data.filter(i => i.NM_TIPO == "OCORRÊNCIA")]
           }
         ]
@@ -121,6 +124,48 @@ class Comunication extends React.Component {
         alert("Erro ao carregar informações.");
       });
   };
+
+
+
+  // componentDidUpdate = () => {
+  //   api
+  //   .post('notificacao/lstNotificacao-homologacao/', {
+  //     p_cd_usuario: user.USU_LOGIN,
+  //   })
+  //   .then((res) => {
+
+  //     let info = []
+  //     info = [
+  //       {
+  //         id: 0,
+  //         ds_title: "COMUNICADO",
+  //         ds_content: [...this.state.itens[0].ds_content, res.data.filter(i => i.NM_TIPO == "COMUNICADO")]
+  //       },
+  //       {
+  //         id: 1,
+  //         ds_title: "EVENTO",
+  //         ds_content: [...this.state.itens[1].ds_content, res.data.filter(i => i.NM_TIPO == "EVENTO")]
+  //       },
+  //       {
+  //         id: 2,
+  //         ds_title: "OCORRÊNCIA",
+  //         ds_content: [...this.state.itens[2].ds_content, res.data.filter(i => i.NM_TIPO == "OCORRÊNCIA")]
+  //       }
+  //     ]
+
+
+  //     // console.log(this.state.itens[this.state.select_option].ds_content);
+  //     this.setState({
+  //       itens: info,
+  //       loading: false
+  //     })
+
+  //   })
+  //   .catch((err) => {
+  //     alert("Erro ao carregar informações.");
+  //   });
+  // }
+
 
 
   responderNotificacao(resposta, id){
@@ -157,9 +202,31 @@ class Comunication extends React.Component {
           <HeaderAuthenticated />
 
          
-          <View style={{backgroundColor:"#CCC", marginTop:-2}}>
-            <TouchableOpacity style={{justifyContent:'center', alignItems: 'center', padding:10}} onPress={() => this.closeModal()}>
-                <Text>{this.state.select_label} </Text>
+          <View style={{backgroundColor:'transparent', marginTop:-2}}>
+            <TouchableOpacity style={{justifyContent:'center', 
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  alignItems: 'center', 
+                  marginVertical:20,
+                  marginHorizontal:20, 
+                  paddingVertical:10,
+                  paddingHorizontal: 10,
+                  paddingLeft:15,
+                  borderRadius: 40,
+                  borderWidth: 1,
+                  borderColor: '#E8E8E8',
+                  backgroundColor: '#FFFFFF'}} onPress={() => this.closeModal()}>
+                <IconFont name="th-list" size={25} color="#E6BD56"/>
+                <Text style={{
+                textAlign: 'center',
+                color: '#4674b7',
+                fontWeight: 'bold',
+                fontSize: 16,
+              }}>
+              {this.state.select_label} 
+              </Text>
+              <IconFont name="angle-down" size={25} />
             </TouchableOpacity>
           </View>
           
@@ -169,14 +236,12 @@ class Comunication extends React.Component {
             visible={this.state.select_visible}
             onRequestClose={() => {
               Alert.alert("Modal fechada")
-            }}
-          
-          >
+            }}>
             
             <View style={{flex:1}}>
-              <View style={{backgroundColor:"#FFF", width:'100%', height:'40%', position: 'absolute', bottom: 0}}>
+              <View style={{backgroundColor:"#FFFFFF", width:'100%', height:'40%', position: 'absolute', bottom: 0}}>
                 <TouchableOpacity style={{justifyContent:'center', alignItems: 'center', marginTop:50}} onPress={() => this.closeModal()}>
-                    <Text>Fechar</Text>
+                    <Text style={{fontSize: responsiveFontSize(2), fontWeight: 'bold', justifyContent:'center', alignItems:'center'}}><Icon name="close" size={25}/> Fechar</Text>
                 </TouchableOpacity>
                 <Picker
                   selectedValue={this.state.select_label}
@@ -189,6 +254,7 @@ class Comunication extends React.Component {
                                                           })}>
                   <Picker.Item label="COMUNICADOS" value="COMUNICADOS" />
                   <Picker.Item label="EVENTOS" value="EVENTOS" />
+                  <Picker.Item label="OCORRÊNCIAS" value="OCORRÊNCIAS" />
                 </Picker>
               </View>
             </View>
@@ -199,7 +265,7 @@ class Comunication extends React.Component {
           {/* {console.log("ID: "+this.state.itens[this.state.select_option].id+"---------")} */}
 
 
-          <View
+          {/* <View
             style={{
               marginVertical: 15,
             }}>
@@ -212,19 +278,20 @@ class Comunication extends React.Component {
               }}>
               COMUNICADOS 
             </Text>
-          </View>
+          </View> */}
     
 
           <View style={{ paddingHorizontal: 20, marginBottom: 20 }} >
               {this.state.loading && <ActivityIndicator size="large" color="#4674B7" />}
-              {console.log(this.state.itens[0].ds_content[0])}
+              {/* {console.log(this.state.itens[0].ds_content[0])} */}
               {/**  itens[modificar o state conforme o selecionado] */}
-              {console.log(`modificado ${this.state.select_option}`)}
+              {/* {console.log(`modificado ${this.state.select_option}`)} */}
 
 
               <View
                 scrollEnabled={true}
                 scrollIndicatorInsets={true}>
+                
                 <FlatList
                     data={this.state.itens[this.state.select_option].ds_content[0]}
                     renderItem={(itemComunicado) =>
@@ -240,13 +307,19 @@ class Comunication extends React.Component {
                               })
                             }}>     
                       
-                       <View style={styles.box}>
+                       <View style={[styles.box, itemComunicado.item.FLG_LIDO == 'S' ? styles.boxLido : styles.boxNaoLido]}>
                           <View style={{flex:2, flexDirection: 'row'}}>
                               <View style={{paddingRight: 30}}>
-                                  <Text style={[styles.boxTitle]}>{itemComunicado.item.TITULO} </Text>
+                                  <Text style={[styles.boxTitle]}> {itemComunicado.item.TITULO} </Text>
                                   
                               </View>
-                              <Text style={{flex:1, alignSelf: "flex-end", position:'absolute', right: 0, top:0}}> <Icon name="star" size={30}  style={[styles.btnTextYellow, styles.btnIconSmall]}/></Text>
+                              <Text style={{flex:1, alignSelf: "flex-end", position:'absolute', right: 0, top:0}}> 
+                                {itemComunicado.item.FLG_LIDO == 'S' 
+                                ? <IconMaterial name="star-outline" size={30}  style={[styles.btnTextYellow, styles.btnIconSmall]}/>
+                                : <IconMaterial name="star" size={30}  style={[styles.btnTextYellow, styles.btnIconSmall]}/>}
+                                
+                                
+                              </Text>
                                  
                               <View style={{flex:1.2}}>
                                   {itemComunicado.item.FLG_ACAO == 'CONCLUIDO' && <Text style={styles.btn}><Text style={[styles.btnText, styles.btnTextGreen]}>{itemComunicado.item.FLG_ACAO}</Text> <Icon name="check" size={25}  style={[styles.btnTextGreen, styles.btnIconSmall]}/></Text>}
@@ -256,7 +329,7 @@ class Comunication extends React.Component {
                               
                           </View>
                           <View>
-                            <Text style={styles.boxContent}>{leiaMais(itemComunicado.item.MENSAGEM,100)}</Text>
+                            <Text style={[styles.boxContent, itemComunicado.item.FLG_LIDO == 'N' && styles.boxTextBold]}>{leiaMais(itemComunicado.item.MENSAGEM,100)}</Text>
                             <Text style={styles.contentDate}>
                                 {itemComunicado.item.DT_NOTIFICAR} - {itemComunicado.item.HORARIO}
                             </Text>
@@ -269,6 +342,9 @@ class Comunication extends React.Component {
                   }
                   keyExtractor={(item) => item.ID}
                 />
+
+
+
               </View>
 
            
@@ -281,11 +357,18 @@ class Comunication extends React.Component {
 
 
 const styles = StyleSheet.create({
-  
+  boxLido:{
+    backgroundColor: '#FFFFFF',
+  },
+  boxNaoLido:{
+    backgroundColor: '#E8E8E8',
+  },
+  boxTextBold:{
+    fontWeight: 'bold'
+  },
   box: {
       borderWidth: 1,
       borderColor: '#E8E8E8',
-      backgroundColor: '#FFF',
       padding: 20,
       borderRadius: 20,
       marginBottom: 10

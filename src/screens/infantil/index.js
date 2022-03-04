@@ -191,10 +191,14 @@ class AcompanhamentoInfantil extends React.Component {
                     <View style={styles.boxCard_Row}>
                         <Text style={styles.boxCard_Title}>LANCHE DA MANHÃ</Text>
                         <View style={styles.boxCard_Border}>
+
+                          {this.state.acompanhamento.COLACAO != null && 
                           <Text
                             style={styles.boxCard_Border_Title}>
-                            {this.state.acompanhamento.COLACAO != null ? this.state.acompanhamento.COLACAO : '-'}
+                            {this.state.acompanhamento.COLACAO}
                           </Text>
+                          }
+
                         </View>
                     </View>
 
@@ -213,10 +217,12 @@ class AcompanhamentoInfantil extends React.Component {
                         <Text style={styles.boxCard_Title}>ALMOÇO</Text>
                       
                         <View style={styles.boxCard_Border}>
+                        {this.state.acompanhamento.ALMOCO != null &&
                           <Text
                             style={styles.boxCard_Border_Title}>
-                            {this.state.acompanhamento.ALMOCO != null ? this.state.acompanhamento.ALMOCO : '-'}
+                            {this.state.acompanhamento.ALMOCO}
                           </Text>
+                        }
                         </View>
                     </View>
 
@@ -233,10 +239,14 @@ class AcompanhamentoInfantil extends React.Component {
                     <View style={styles.boxCard_Row}>
                         <Text style={styles.boxCard_Title}>LANCHE DA TARDE</Text>
                         <View style={styles.boxCard_Border}>
+                          
+                          {this.state.acompanhamento.LANCHE != null && 
                           <Text
                             style={styles.boxCard_Border_Title}>
-                            {this.state.acompanhamento.LANCHE != null ? this.state.acompanhamento.LANCHE : '-'}
+                             {this.state.acompanhamento.LANCHE}
                           </Text>
+                          }
+
                         </View>
                     </View>
 
@@ -253,10 +263,14 @@ class AcompanhamentoInfantil extends React.Component {
                     <View style={styles.boxCard_Row}>
                         <Text style={styles.boxCard_Title}>SONO</Text>
                         <View style={styles.boxCard_Border}>
+                        
+                        {this.state.acompanhamento.SONO != null &&
                           <Text
                             style={styles.boxCard_Border_Title}>
-                            {this.state.acompanhamento.SONO != null ? this.state.acompanhamento.SONO : '-'}
+                            {this.state.acompanhamento.SONO}
                           </Text>
+                        }
+
                         </View>
                     </View>
 
@@ -274,10 +288,14 @@ class AcompanhamentoInfantil extends React.Component {
                     <View style={styles.boxCard_Row}>
                         <Text style={styles.boxCard_Title}>EVACUAÇÃO</Text>
                         <View style={styles.boxCard_Border}>
+                        
+                        {this.state.acompanhamento.EVACUACAO != null && 
                           <Text
                             style={styles.boxCard_Border_Title}>
-                            {this.state.acompanhamento.EVACUACAO != null ? this.state.acompanhamento.EVACUACAO : '-'}
+                            {this.state.acompanhamento.EVACUACAO}
                           </Text>
+                        }
+
                         </View>
                     </View>
 
@@ -292,61 +310,50 @@ class AcompanhamentoInfantil extends React.Component {
                
                 
 
-
-                <View style={styles.boxTitle}>
-                  <Text style={styles.textTitle}>Informativo Diário</Text> 
-                </View>
-                <View style={styles.boxObs}>
-                  <Text style={styles.textObs}>{this.state.acompanhamento.OBSERVACAO}</Text>
-                </View>
-
-
-
-
-
-                
-
-
-                {/* <View>
-                  <TouchableOpacity
-                  onPress={()=>{this.toggleTextArea()}}
-                  style={styles.boxBtn}>
-                    <Text style={styles.textBtn}>Responder</Text>
-                  </TouchableOpacity>
-                </View> */}
-
-
-
-                {this.state.acompanhamento.OBSERVACAO_RESP == null 
-                ?
-                <View> 
-                  <TextInput style={styles.textarea} 
-                            multiline={true} placeholder="Responder..."
-                            onChangeText={(text) => this.setState({text})}
-                            value={this.state.text}/>
-                  <TouchableOpacity
-                  onPress={()=>{this.responder()}}
-                  style={styles.boxBtn}>
-                    {this.state.loading_btn 
-                    ? <ActivityIndicator size="large" color="#FFFFFF" /> 
-                    : <Text style={styles.textBtn}>Enviar Mensagem</Text>}
-                    
-                  </TouchableOpacity>
-                </View>
-                :
-                  <View>
-                    <View style={styles.boxTitle}>
-                      <Text style={styles.textTitle}>Responsável</Text> 
-                    </View>
-                    <View style={styles.boxResposta}>
-                      <Text style={styles.boxRespostaText}>
-                        {this.state.acompanhamento.OBSERVACAO_RESP}
-                      </Text>
-                    </View>
+                {this.state.acompanhamento.OBSERVACAO == null &&
+                <View>
+                  <View style={styles.boxTitle}>
+                    <Text style={styles.textTitle}>INFORMATIVO DIÁRIO</Text> 
                   </View>
+                
+                  <View style={styles.boxObs}>
+                    <Text style={styles.textObs}>{this.state.acompanhamento.OBSERVACAO}</Text>
+                  </View>
+               
+
+
+
+                  {this.state.acompanhamento.OBSERVACAO_RESP == null 
+                  ?
+                  <View> 
+                    <TextInput style={styles.textarea} 
+                              multiline={true} placeholder="Responder..."
+                              onChangeText={(text) => this.setState({text})}
+                              value={this.state.text}/>
+                    <TouchableOpacity
+                    onPress={()=>{this.responder()}}
+                    style={styles.boxBtn}>
+                      {this.state.loading_btn 
+                      ? <ActivityIndicator size="large" color="#FFFFFF" /> 
+                      : <Text style={styles.textBtn}>Enviar Mensagem</Text>}
+                      
+                    </TouchableOpacity>
+                  </View>
+                  :
+                    <View>
+                      <View style={styles.boxTitle}>
+                        <Text style={styles.textTitle}>Responsável</Text> 
+                      </View>
+                      <View style={styles.boxResposta}>
+                        <Text style={styles.boxRespostaText}>
+                          {this.state.acompanhamento.OBSERVACAO_RESP}
+                        </Text>
+                      </View>
+                    </View>
+                  }
+                 
+                 </View>
                 }
-
-
 
 
             </View>
