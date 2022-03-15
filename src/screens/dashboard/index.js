@@ -19,6 +19,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Header from '../../components/ui/header';
 import HeaderAuthenticated from '../../components/ui/header-authenticated';
 import HeaderSelectUser from '../../components/ui/header-select-user';
+import InstaStory from 'react-native-insta-story';
 import Alert from '../../screens/alert';
 import Icon from 'react-native-vector-icons/AntDesign';
 Icon.loadFont();
@@ -155,6 +156,36 @@ class Dashboard extends Component {
       
     }*/
 
+
+    const stores = [
+      {
+          user_id: 1,
+          user_image: 'https://seculomanaus.com.br/story/1.png',
+          user_name: "Século Manaus",
+          stories: [
+              {
+                  story_id: 1,
+                  story_image: "https://seculomanaus.com.br/story/1.png",
+                  swipeText:'Século Manaus',
+                  onPress: () => console.log('story 1 swiped'),
+              },
+              {
+                  story_id: 2,
+                  story_image: "https://seculomanaus.com.br/story/2.png",
+              }]
+      },
+      {
+          user_id: 2,
+          user_image: 'https://seculomanaus.com.br/story/3.png',
+          user_name: "Test User",
+          stories: [
+              {
+                  story_id: 1,
+                  story_image: "https://seculomanaus.com.br/story/3.png",
+                  swipeText:'Século Manaus',
+                  onPress: () => console.log('story 1 swiped'),
+              }]
+      }];
 
     const data = [
       {
@@ -337,6 +368,16 @@ class Dashboard extends Component {
           <HeaderAuthenticated />
 
           <Alert navigation={this.props.navigation}/>      
+
+          
+          <InstaStory data={stores}
+            duration={10}
+            onStart={item => console.log(item)}
+            onClose={item => console.log('close: ', item)}
+            customSwipeUpComponent={<View>
+                                <Text>Swipe</Text>
+                            </View>}
+            style={{marginTop: 30}}/>
 
 
           <View style={{paddingHorizontal: 10, marginTop: 20}}>
