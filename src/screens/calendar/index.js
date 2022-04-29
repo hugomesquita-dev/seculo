@@ -5,6 +5,7 @@ import { View,
       ScrollView, 
       FlatList,
       Image,
+      Linking,
       Dimensions,
       StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
@@ -17,7 +18,11 @@ Icon.loadFont();
 import api from '../../config/api';
 import { Calendar, LocaleConfig} from 'react-native-calendars';
 import HeaderSelectUser from '../../components/ui/header-select-user';
-
+import {
+  responsiveHeight,
+  responsiveWidth,
+  responsiveFontSize
+} from "react-native-responsive-dimensions";
 
 LocaleConfig.locales['pt'] = {
   monthNames: ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],
@@ -162,6 +167,8 @@ class CalendarPage extends React.Component {
           <View style={{paddingHorizontal: 20, paddingBottom: 20}}>
 
           <HeaderSelectUser />
+            
+
 
             <Calendar
               monthFormat={'MMMM yyyy'}
@@ -169,6 +176,18 @@ class CalendarPage extends React.Component {
               markedDates={this.state.eventsDates}
               style={{ fontWeight:'bold', marginTop:15, marginBottom:15, paddingVertical:10, borderRadius:10, borderColor: '#E8E8E8', borderWidth:1}}
             />
+
+            <View> 
+              <TouchableOpacity
+                onPress={() => {Linking.openURL('https://seculomanaus.com.br/componentes/portal/arquivos/20220211_1226Calendario%20Escolar%202022.pdf');}}
+                style={{flex: 1, justifyContent:'center', marginBottom:20, alignItems:'center', padding:10, borderRadius:10, backgroundColor:'#4674b7'}}>
+                <Text style={{ textAlign: 'center',
+                color: '#FFF',
+                fontWeight: 'bold',
+                fontSize: responsiveFontSize(1.8)}}>Baixar Calendário Anual</Text>
+              </TouchableOpacity>
+            </View>
+
 
             <View>
               <Text style={{paddingVertical: 5}}>
