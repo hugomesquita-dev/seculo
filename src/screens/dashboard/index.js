@@ -370,14 +370,14 @@ class Dashboard extends Component {
           <Alert navigation={this.props.navigation}/>      
 
           
-          <InstaStory data={stores}
+          {/* <InstaStory data={stores}
             duration={10}
             onStart={item => console.log(item)}
             onClose={item => console.log('close: ', item)}
             customSwipeUpComponent={<View>
                                 <Text>Swipe</Text>
                             </View>}
-            style={{marginTop: 30}}/>
+            style={{marginTop: 30}}/> */}
 
 
           <View style={{paddingHorizontal: 10, marginTop: 20}}>

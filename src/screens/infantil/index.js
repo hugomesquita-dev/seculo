@@ -310,7 +310,7 @@ class AcompanhamentoInfantil extends React.Component {
                
                 
 
-                {this.state.acompanhamento.OBSERVACAO == null &&
+
                 <View>
                   <View style={styles.boxTitle}>
                     <Text style={styles.textTitle}>INFORMATIVO DIÁRIO</Text> 
@@ -323,13 +323,13 @@ class AcompanhamentoInfantil extends React.Component {
 
 
 
-                  {this.state.acompanhamento.OBSERVACAO_RESP == null 
-                  ?
+                  {this.state.acompanhamento.OBSERVACAO_RESP == null ?
                   <View> 
                     <TextInput style={styles.textarea} 
                               multiline={true} placeholder="Responder..."
                               onChangeText={(text) => this.setState({text})}
                               value={this.state.text}/>
+
                     <TouchableOpacity
                     onPress={()=>{this.responder()}}
                     style={styles.boxBtn}>
@@ -352,8 +352,8 @@ class AcompanhamentoInfantil extends React.Component {
                     </View>
                   }
                  
-                 </View>
-                }
+                </View>
+                
 
 
             </View>
@@ -416,7 +416,8 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     borderColor: '#DDDDDD',
     borderWidth: 1,
-    borderRadius: 10
+    borderRadius: 10,
+    color: '#111111'
   },
   boxBtn: {
     backgroundColor: '#4F74B2',
