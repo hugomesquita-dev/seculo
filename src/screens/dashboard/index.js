@@ -103,6 +103,7 @@ class Dashboard extends Component {
       messaging()
       .unsubscribeFromTopic(this.props.auth.user.USU_LOGIN)
       .then(() => console.log('Subscribed to topic!'));
+      
 
       for(let index in this.props.students.students){
         messaging()
@@ -383,6 +384,17 @@ class Dashboard extends Component {
           <View style={{paddingHorizontal: 10, marginTop: 20}}>
             <HeaderSelectUser />
           </View>
+
+          {/*mauricio*/}
+          <TouchableOpacity
+              onPress={alert('teste ok!')}
+              style={{flex: 1, justifyContent:'center', marginHorizontal:20, alignItems:'center', padding:10, borderRadius:0, backgroundColor:'#4674b7'}}>
+              <Text style={{ textAlign: 'center',
+                color: '#FFF',
+                fontWeight: 'bold',
+                fontSize: responsiveFontSize(1.8)}}> 
+                 Confirmar pré-matrícula</Text>
+          </TouchableOpacity>
          
           
 
